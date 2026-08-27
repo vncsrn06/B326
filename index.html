@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+  <title>Love Claw Machine 💗</title>
+
+  <link
+          rel="stylesheet"
+          href="style.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <!-- =========================================
+       TITLE
+  ========================================== -->
+
+  <h1>
+    <span>LOVE</span> CLAW MACHINE
+  </h1>
+
+
+  <!-- =========================================
+       START BUTTON
+  ========================================== -->
+
+  <button
+          id="startGame"
+          class="start-button">
+
+    ♥ START GAME ♥
+
+  </button>
+
+
+  <!-- =========================================
+       MACHINE
+  ========================================== -->
+
+  <div class="machine">
+
+    <div
+            class="glass"
+            id="glass">
+
+
+      <!-- =================================
+           CLAW
+      ================================== -->
+
+      <div
+              class="claw"
+              id="claw">
+
+        <div class="rope"></div>
+
+        <div class="claw-head">
+
+          <div class="claw-light"></div>
+
+        </div>
+
+        <div class="claw-arm left-arm"></div>
+
+        <div class="claw-arm right-arm"></div>
+
+      </div>
+
+
+      <!-- =================================
+           TEDDY BEARS
+      ================================== -->
+
+      <div class="plushies">
+
+
+        <!-- TEDDY 1 -->
+
+        <div
+                class="plushie teddy teddy1"
+                data-id="1">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 2 -->
+
+        <div
+                class="plushie teddy teddy2"
+                data-id="2">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 3 -->
+
+        <div
+                class="plushie teddy teddy3"
+                data-id="3">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 4 -->
+
+        <div
+                class="plushie teddy teddy4"
+                data-id="4">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 5 -->
+
+        <div
+                class="plushie teddy teddy5"
+                data-id="5">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 6 -->
+
+        <div
+                class="plushie teddy teddy6"
+                data-id="6">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 7 -->
+
+        <div
+                class="plushie teddy teddy7"
+                data-id="7">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 8 -->
+
+        <div
+                class="plushie teddy teddy8"
+                data-id="8">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 9 -->
+
+        <div
+                class="plushie teddy teddy9"
+                data-id="9">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+
+        <!-- TEDDY 10 -->
+
+        <div
+                class="plushie teddy teddy10"
+                data-id="10">
+
+          <div class="ear ear-left"></div>
+
+          <div class="ear ear-right"></div>
+
+          <div class="head"></div>
+
+          <div class="body"></div>
+
+          <div class="eye eye-left"></div>
+
+          <div class="eye-right"></div>
+
+          <div class="nose"></div>
+
+          <div class="mouth"></div>
+
+          <div class="heart">♥</div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================
+           FLOOR
+      ================================== -->
+
+      <div class="floor"></div>
+
+
+      <!-- =================================
+           PRIZE CHUTE
+      ================================== -->
+
+      <div
+              class="prize-chute"
+              id="prizeChute">
+
+        <div class="chute-hole"></div>
+
+        <div class="chute-text">
+          PRIZE
+        </div>
+
+      </div>
+
+
+      <!-- =================================
+           GLASS SHINE
+      ================================== -->
+
+      <div class="glass-shine"></div>
+
+    </div>
+
+
+    <!-- =====================================
+         CONTROLS
+    ====================================== -->
+
+    <div class="controls">
+
+      <button
+              id="leftButton"
+              class="control-button">
+
+        ◀
+
+      </button>
+
+
+      <button
+              id="grabButton"
+              class="grab-button">
+
+        GRAB
+
+        <small>
+          SPACE
+        </small>
+
+      </button>
+
+
+      <button
+              id="rightButton"
+              class="control-button">
+
+        ▶
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
+       MESSAGE
+  ========================================== -->
+
+  <div class="message-box">
+
+    <h2 id="messageTitle">
+      💌 LOVE CLAW MACHINE
+    </h2>
+
+    <p id="message">
+      Press START GAME and
+      catch your first teddy. 🧸
+    </p>
+
+    <div class="progress">
+
+            <span id="count">
+                0
+            </span>
+
+      / 10
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
+       MESSAGE POPUP
+  ========================================== -->
+
+  <div
+          id="messageModal"
+          class="modal hidden">
+
+    <div class="modal-card">
+
+
+      <!-- CLOSE -->
+
+      <button
+              id="closeModal"
+              class="close-button">
+
+        ×
+
+      </button>
+
+
+      <!-- PICTURE -->
+
+      <img
+              id="modalImage"
+              class="modal-image"
+              src=""
+              alt="Memory">
+
+
+      <!-- TEDDY -->
+
+      <div
+              id="modalTeddy"
+              class="modal-teddy">
+
+        🧸
+
+      </div>
+
+
+      <!-- TITLE -->
+
+      <h2 id="modalTitle">
+        A message for you 💗
+      </h2>
+
+
+      <!-- MESSAGE -->
+
+      <p id="modalMessage">
+        ...
+      </p>
+
+
+      <!-- CONTINUE -->
+
+      <button
+              id="continueButton"
+              class="continue-button">
+
+        ♥ KEEP PLAYING ♥
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
