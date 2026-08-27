@@ -2,11 +2,11 @@
    ELEMENTS
 ===================================================== */
 
+const glass =
+    document.getElementById("glass");
+
 const claw =
     document.getElementById("claw");
-
-const glass =
-    document.querySelector(".glass");
 
 const plushies =
     document.querySelectorAll(".plushie");
@@ -35,6 +35,9 @@ const count =
 const messageModal =
     document.getElementById("messageModal");
 
+const modalImage =
+    document.getElementById("modalImage");
+
 const modalTeddy =
     document.getElementById("modalTeddy");
 
@@ -48,7 +51,9 @@ const closeModal =
     document.getElementById("closeModal");
 
 const continueButton =
-    document.getElementById("continueButton");
+    document.getElementById(
+        "continueButton"
+    );
 
 
 /* =====================================================
@@ -63,9 +68,38 @@ let clawPosition = 50;
 
 let collected = 0;
 
-let carrying = null;
+let carriedTeddy = null;
 
-let carryingAnimation = null;
+let carryAnimation = null;
+
+
+/* =====================================================
+   TEDDY PICTURES
+===================================================== */
+
+const teddyPictures = {
+
+    1: "pictures/teddy1.jpg",
+
+    2: "pictures/teddy2.jpg",
+
+    3: "pictures/teddy3.jpg",
+
+    4: "pictures/teddy4.jpg",
+
+    5: "pictures/teddy5.jpg",
+
+    6: "pictures/teddy6.jpg",
+
+    7: "pictures/teddy7.jpg",
+
+    8: "pictures/teddy8.jpg",
+
+    9: "pictures/teddy9.jpg",
+
+    10: "pictures/teddy10.jpg"
+
+};
 
 
 /* =====================================================
@@ -78,13 +112,13 @@ const loveMessages = {
         "You make my world brighter just by being in it. I hope this little teddy reminds you how special you are to me. 💗",
 
     2:
-        "Every time I think about you, I smile. You have a special place in my heart that nobody else could ever replace. ❤️",
+        "Every time I think about you, I smile. You have a place in my heart that nobody else could ever replace. ❤️",
 
     3:
-        "Even the simplest moments become special when I'm with you. Thank you for being someone I can laugh and make memories with. 🥰",
+        "Even ordinary days feel special when I'm with you. Thank you for all the little moments we share. 🥰",
 
     4:
-        "Whenever you need a reminder that you're loved, remember this little teddy and remember me. You mean so much to me. 💕",
+        "Whenever you need a reminder that you're loved, remember this little teddy and remember me. 💕",
 
     5:
         "You deserve all the happiness in the world. I hope I can always be one of the people who makes you smile. 🌸",
@@ -99,7 +133,7 @@ const loveMessages = {
         "If I could put one hug inside every teddy, this whole machine would be full of hugs just for you. 🧸💞",
 
     9:
-        "You're not just someone I love. You're also someone I genuinely enjoy having in my life. That means more than you know. 💕",
+        "You're not just someone I love. You're someone I genuinely enjoy having in my life. That means more than you know. 💕",
 
     10:
         "YOU GOT THE FINAL TEDDY! 🎉 But the real prize was never inside this machine. The real prize is having you in my life. I love you so much. ❤️"
@@ -108,7 +142,7 @@ const loveMessages = {
 
 
 /* =====================================================
-   START
+   START GAME
 ===================================================== */
 
 startButton.addEventListener(
@@ -135,6 +169,28 @@ function startGame() {
     message.textContent =
         "Move the claw over a teddy and press GRAB! 💗";
 
+
+    leftButton.disabled =
+        false;
+
+    rightButton.disabled =
+        false;
+
+    grabButton.disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   UPDATE CLAW
+===================================================== */
+
+function updateClaw() {
+
+    claw.style.left =
+        clawPosition + "%";
+
 }
 
 
@@ -152,7 +208,8 @@ function moveLeft() {
 
     if (
         !gameStarted ||
-        busy
+        busy ||
+        collected >= 10
     ) {
         return;
     }
@@ -189,7 +246,8 @@ function moveRight() {
 
     if (
         !gameStarted ||
-        busy
+        busy ||
+        collected >= 10
     ) {
         return;
     }
@@ -213,19 +271,7 @@ function moveRight() {
 
 
 /* =====================================================
-   UPDATE CLAW
-===================================================== */
-
-function updateClaw() {
-
-    claw.style.left =
-        clawPosition + "%";
-
-}
-
-
-/* =====================================================
-   GET CLOSEST TEDDY
+   FIND TEDDY
 ===================================================== */
 
 function getTargetTeddy() {
@@ -249,37 +295,40 @@ function getTargetTeddy() {
 
 
     plushies.forEach(
-        plushie => {
+        teddy => {
 
             if (
-                plushie.style.display ===
+                teddy.style.display ===
                 "none"
             ) {
+
                 return;
+
             }
 
 
             if (
-                plushie.classList.contains(
-                    "collected"
-                )
+                teddy.dataset.collected ===
+                "true"
             ) {
+
                 return;
+
             }
 
 
-            const rect =
-                plushie.getBoundingClientRect();
+            const teddyRect =
+                teddy.getBoundingClientRect();
 
 
-            const center =
-                rect.left +
-                rect.width / 2;
+            const teddyCenter =
+                teddyRect.left +
+                teddyRect.width / 2;
 
 
             const distance =
                 Math.abs(
-                    center -
+                    teddyCenter -
                     clawCenter
                 );
 
@@ -293,7 +342,7 @@ function getTargetTeddy() {
                     distance;
 
                 target =
-                    plushie;
+                    teddy;
 
             }
 
@@ -302,7 +351,7 @@ function getTargetTeddy() {
 
 
     /*
-       Player has to be reasonably close.
+        Player must be close enough.
     */
 
     if (
@@ -320,23 +369,34 @@ function getTargetTeddy() {
 
 
 /* =====================================================
-   GRAB
+   GRAB BUTTON
 ===================================================== */
 
 grabButton.addEventListener(
     "click",
-    grab
+    grabTeddy
 );
 
 
-function grab() {
+function grabTeddy() {
 
     if (
         !gameStarted ||
         busy ||
-        carrying
+        carriedTeddy
     ) {
+
         return;
+
+    }
+
+
+    if (
+        collected >= 10
+    ) {
+
+        return;
+
     }
 
 
@@ -347,9 +407,9 @@ function grab() {
         getTargetTeddy();
 
 
-    /* =========================================
+    /* =================================================
        MISS
-    ========================================= */
+    ================================================= */
 
     if (!target) {
 
@@ -358,7 +418,7 @@ function grab() {
 
 
         message.textContent =
-            "Move the claw closer to a teddy and try again!";
+            "Move the claw directly over a teddy and try again!";
 
 
         claw.classList.add(
@@ -383,9 +443,9 @@ function grab() {
     }
 
 
-    /* =========================================
+    /* =================================================
        CLOSE CLAW
-    ========================================= */
+    ================================================= */
 
     claw.classList.add(
         "grabbing"
@@ -397,55 +457,63 @@ function grab() {
 
 
     message.textContent =
-        "The claw is grabbing the teddy...";
+        "The claw is grabbing the teddy... 💗";
 
 
-    /* =========================================
+    /* =================================================
        GO DOWN
-    ========================================= */
+    ================================================= */
 
     claw.style.top =
         "170px";
 
 
     /*
-       Wait for claw to arrive.
+       Wait for claw to reach teddy.
     */
 
     setTimeout(() => {
 
-        attachTeddy(target);
+        attachTeddy(
+            target
+        );
 
     }, 750);
 
 
-    /* =========================================
+    /* =================================================
        GO UP
-    ========================================= */
+    ================================================= */
 
     setTimeout(() => {
 
         claw.style.top =
             "0";
 
+        messageTitle.textContent =
+            "🧸 GOT IT!";
+
+        message.textContent =
+            "Don't drop it! We're taking it to the prize chute. 💕";
+
     }, 1250);
 
 
-    /*
-       Go to prize chute.
-    */
+    /* =================================================
+       MOVE TO PRIZE CHUTE
+    ================================================= */
 
     setTimeout(() => {
 
         claw.style.left =
             "18%";
 
-    }, 1950);
+    }, 1900);
 
 
-    /*
-       Release teddy.
-    */
+    /* =================================================
+       DROP
+    ================================================= */
 
     setTimeout(() => {
 
@@ -456,9 +524,9 @@ function grab() {
     }, 2600);
 
 
-    /*
-       Finish.
-    */
+    /* =================================================
+       RESET
+    ================================================= */
 
     setTimeout(() => {
 
@@ -477,8 +545,7 @@ function grab() {
 
         busy = false;
 
-
-    }, 3400);
+    }, 3600);
 
 }
 
@@ -491,42 +558,44 @@ function attachTeddy(
     teddy
 ) {
 
-    carrying =
+    carriedTeddy =
         teddy;
 
 
+    teddy.classList.add(
+        "carried"
+    );
+
+
     /*
-       Remove bottom positioning.
+       Remove its old bottom positioning.
     */
 
     teddy.style.bottom =
         "auto";
 
 
-    teddy.style.transition =
-        "none";
-
-
     /*
-       It becomes visually attached
-       to the claw.
+       Continue following claw.
     */
 
-    carryTeddy();
+    followClaw();
 
 }
 
 
 /* =====================================================
-   CONTINUOUS TEDDY FOLLOW
+   TEDDY FOLLOWS CLAW
 ===================================================== */
 
-function carryTeddy() {
+function followClaw() {
 
     if (
-        !carrying
+        !carriedTeddy
     ) {
+
         return;
+
     }
 
 
@@ -538,20 +607,15 @@ function carryTeddy() {
         claw.getBoundingClientRect();
 
 
+    const teddyWidth =
+        carriedTeddy.offsetWidth;
+
+
     /*
-       Calculate teddy position
-       based on current claw position.
+       Horizontal center
     */
 
-    const teddyWidth =
-        carrying.offsetWidth;
-
-
-    const teddyHeight =
-        carrying.offsetHeight;
-
-
-    const left =
+    const teddyLeft =
         clawRect.left -
         glassRect.left +
         (
@@ -560,23 +624,32 @@ function carryTeddy() {
         ) / 2;
 
 
-    const top =
+    /*
+       Teddy stays underneath
+       the claw head.
+    */
+
+    const teddyTop =
         clawRect.top -
         glassRect.top +
-        105;
+        115;
 
 
-    carrying.style.left =
-        left + "px";
+    carriedTeddy.style.left =
+        teddyLeft + "px";
 
 
-    carrying.style.top =
-        top + "px";
+    carriedTeddy.style.top =
+        teddyTop + "px";
 
 
-    carryingAnimation =
+    carriedTeddy.style.transform =
+        "none";
+
+
+    carryAnimation =
         requestAnimationFrame(
-            carryTeddy
+            followClaw
         );
 
 }
@@ -591,33 +664,34 @@ function releaseTeddy(
 ) {
 
     /*
-       Stop continuous following.
+       Stop follow animation.
     */
 
-    carrying = null;
-
-
     if (
-        carryingAnimation
+        carryAnimation
     ) {
 
         cancelAnimationFrame(
-            carryingAnimation
+            carryAnimation
         );
 
-        carryingAnimation =
+        carryAnimation =
             null;
 
     }
 
 
+    carriedTeddy =
+        null;
+
+
     /*
-       Get prize chute.
+       Get chute coordinates.
     */
 
     const chute =
-        document.querySelector(
-            ".prize-chute"
+        document.getElementById(
+            "prizeChute"
         );
 
 
@@ -630,48 +704,29 @@ function releaseTeddy(
 
 
     /*
-       Current teddy position.
+       Current teddy screen location.
     */
 
-    const currentRect =
+    const teddyRect =
         teddy.getBoundingClientRect();
 
 
     const currentLeft =
-        currentRect.left -
+        teddyRect.left -
         glassRect.left;
 
 
     const currentTop =
-        currentRect.top -
+        teddyRect.top -
         glassRect.top;
 
 
     /*
-       Target position.
+       Put teddy inside glass.
     */
 
-    const targetLeft =
-        chuteRect.left -
-        glassRect.left +
-        (
-            chuteRect.width -
-            teddy.offsetWidth
-        ) / 2;
-
-
-    const targetTop =
-        chuteRect.top -
-        glassRect.top -
-        55;
-
-
-    /*
-       Put teddy back into glass.
-    */
-
-    glass.appendChild(
-        teddy
+    teddy.classList.remove(
+        "carried"
     );
 
 
@@ -700,18 +755,33 @@ function releaseTeddy(
 
 
     /*
-       Force starting position.
+       Target position above chute.
+    */
+
+    const targetLeft =
+        chuteRect.left -
+        glassRect.left +
+        (
+            chuteRect.width -
+            teddy.offsetWidth
+        ) / 2;
+
+
+    const targetTop =
+        chuteRect.top -
+        glassRect.top -
+        65;
+
+
+    /*
+       Move toward chute.
     */
 
     void teddy.offsetWidth;
 
 
-    /*
-       Move smoothly above prize chute.
-    */
-
     teddy.style.transition =
-        "left .45s ease-out, top .45s ease-out";
+        "left .4s ease-out, top .4s ease-out";
 
 
     teddy.style.left =
@@ -723,28 +793,36 @@ function releaseTeddy(
 
 
     /*
-       Drop.
+       Drop after reaching chute.
     */
 
     setTimeout(() => {
 
-        teddy.classList.add(
-            "falling"
-        );
-
-
         teddy.style.transition =
-            "top .65s cubic-bezier(.15,.8,.3,1)";
+            "top .7s cubic-bezier(.18,.75,.28,1)";
+
+
+        teddy.classList.add(
+            "drop-animation"
+        );
 
 
         teddy.style.top =
             (
                 targetTop +
-                62
+                55
             ) + "px";
 
 
     }, 450);
+
+
+    /*
+       Mark collected.
+    */
+
+    teddy.dataset.collected =
+        "true";
 
 
     /*
@@ -758,11 +836,34 @@ function releaseTeddy(
 
 
     /*
-       Show basic message.
+       Hide after landing.
+    */
+
+    setTimeout(() => {
+
+        teddy.style.opacity =
+            "0";
+
+
+        teddy.style.pointerEvents =
+            "none";
+
+
+        teddy.style.display =
+            "none";
+
+
+    }, 1200);
+
+
+    /*
+       Message
     */
 
     const id =
-        teddy.dataset.id;
+        Number(
+            teddy.dataset.id
+        );
 
 
     messageTitle.textContent =
@@ -770,37 +871,46 @@ function releaseTeddy(
 
 
     message.textContent =
-        "Your teddy is waiting for you! Open it for a message. 💗";
+        "Your teddy has arrived! Open your message. 💗";
 
 
     /*
-       Open the message automatically
-       after the teddy lands.
+       Open popup.
     */
 
     setTimeout(() => {
 
-        openMessage(id);
+        openMessage(
+            id
+        );
 
-    }, 1150);
+    }, 1250);
 
 }
 
 
 /* =====================================================
-   OPEN TEDDY MESSAGE
+   OPEN MESSAGE
 ===================================================== */
 
 function openMessage(
     id
 ) {
 
+    modalImage.src =
+        teddyPictures[id];
+
+
+    modalImage.alt =
+        "Memory " + id;
+
+
     modalTeddy.textContent =
-        getTeddyEmoji(id);
+        "🧸";
 
 
     modalTitle.textContent =
-        "💗 Teddy #" + id;
+        "💗 TEDDY #" + id;
 
 
     modalMessage.textContent =
@@ -810,6 +920,22 @@ function openMessage(
     messageModal.classList.remove(
         "hidden"
     );
+
+
+    /*
+       Force teddy animation
+       to restart every time.
+    */
+
+    modalTeddy.style.animation =
+        "none";
+
+
+    void modalTeddy.offsetWidth;
+
+
+    modalTeddy.style.animation =
+        "teddyBounce .7s ease-out";
 
 
     createHearts();
@@ -841,14 +967,14 @@ function closeMessage() {
 
 
     /*
-       Final message.
+       Special ending.
     */
 
     if (
-        collected === 10
+        collected >= 10
     ) {
 
-        showFinal();
+        showFinalMessage();
 
     }
 
@@ -856,39 +982,10 @@ function closeMessage() {
 
 
 /* =====================================================
-   TEDDY EMOJI
+   FINAL MESSAGE
 ===================================================== */
 
-function getTeddyEmoji(
-    id
-) {
-
-    const teddies = [
-
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸",
-        "🧸"
-
-    ];
-
-
-    return teddies[id - 1];
-
-}
-
-
-/* =====================================================
-   FINAL
-===================================================== */
-
-function showFinal() {
+function showFinalMessage() {
 
     messageTitle.textContent =
         "🎉 ALL 10 TEDDIES!";
@@ -897,7 +994,7 @@ function showFinal() {
     message.textContent =
         "You opened every little message. " +
         "But the biggest prize isn't inside the machine. " +
-        "It's having you in my life. ❤️";
+        "The biggest prize is you. ❤️";
 
 
     createManyHearts();
@@ -906,7 +1003,7 @@ function showFinal() {
 
 
 /* =====================================================
-   HEARTS
+   HEART EFFECT
 ===================================================== */
 
 function createHearts() {
@@ -923,45 +1020,28 @@ function createHearts() {
             );
 
 
+        heart.className =
+            "heart-particle";
+
+
         heart.textContent =
-            "♥";
-
-
-        heart.style.position =
-            "fixed";
+            i % 2 === 0
+                ? "♥"
+                : "♡";
 
 
         heart.style.left =
             (
-                15 +
-                Math.random() * 70
+                20 +
+                Math.random() * 60
             ) + "%";
 
 
         heart.style.top =
             (
                 45 +
-                Math.random() * 30
+                Math.random() * 25
             ) + "%";
-
-
-        heart.style.color =
-            "#ff6f9f";
-
-
-        heart.style.fontSize =
-            (
-                16 +
-                Math.random() * 18
-            ) + "px";
-
-
-        heart.style.zIndex =
-            "9999";
-
-
-        heart.style.pointerEvents =
-            "none";
 
 
         document.body.appendChild(
@@ -969,50 +1049,20 @@ function createHearts() {
         );
 
 
-        const animation =
-            heart.animate(
+        requestAnimationFrame(() => {
 
-                [
-
-                    {
-                        transform:
-                            "translateY(0) scale(1)",
-
-                        opacity: 1
-
-                    },
-
-                    {
-
-                        transform:
-                            "translateY(-140px) scale(1.4)",
-
-                        opacity: 0
-
-                    }
-
-                ],
-
-                {
-
-                    duration:
-                        900 +
-                        Math.random() * 500,
-
-                    easing:
-                        "ease-out"
-
-                }
-
+            heart.classList.add(
+                "animate"
             );
 
+        });
 
-        animation.onfinish =
-            () => {
 
-                heart.remove();
+        setTimeout(() => {
 
-            };
+            heart.remove();
+
+        }, 1200);
 
     }
 
@@ -1033,7 +1083,7 @@ function createManyHearts() {
 
         setTimeout(
             createHearts,
-            i * 200
+            i * 180
         );
 
     }
@@ -1080,9 +1130,23 @@ document.addEventListener(
 
             event.preventDefault();
 
-            grab();
+            grabTeddy();
 
         }
 
     }
 );
+
+
+/* =====================================================
+   START WITH BUTTONS DISABLED
+===================================================== */
+
+leftButton.disabled =
+    true;
+
+rightButton.disabled =
+    true;
+
+grabButton.disabled =
+    true;
