@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MariBank ATM</title>
+    <style>
+        :root{
+            --kiosk-shell: #1c2333;
+            --kiosk-shell-dark: #12172400;
+            --kiosk-trim: #2f3b52;
+            --screen-navy: #0a1830;
+            --screen-navy-deep: #061020;
+            --brand-teal: #12b8a6;
+            --brand-teal-dim: #0a6e63;
+            --lcd-amber: #ffb648;
+            --lcd-green: #4be08a;
+            --ink-soft: #a9b8d1;
+            --ink-faint: #5f7291;
+            --danger: #ff6b6b;
+            --key-face: #24314a;
+            --key-face-hi: #2e3f5e;
+            --font-display: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'Consolas', 'SFMono-Regular', 'Courier New', monospace;
+        }
+
+        *{ box-sizing:border-box; }
+
+        body{
+            margin:0;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:
+                    radial-gradient(circle at 30% 20%, #1a2138 0%, #0c0f1a 60%, #07090f 100%);
+            font-family:var(--font-display);
+            padding:32px 16px;
+        }
+
+        /* ===== ATM KIOSK SHELL ===== */
+        .kiosk{
+            width:420px;
+            max-width:100%;
+            background:linear-gradient(180deg, #232b40 0%, #171d2d 100%);
+            border-radius:22px;
+            padding:22px 22px 30px;
+            box-shadow:
+                    0 30px 60px -20px rgba(0,0,0,.7),
+                    inset 0 1px 0 rgba(255,255,255,.05);
+            border:1px solid #2c3550;
+            position:relative;
+        }
+
+        .kiosk-brand{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:2px 6px 16px;
+        }
+
+        .kiosk-brand .logo{
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+
+        .logo-mark{
+            width:26px;
+            height:26px;
+            border-radius:7px;
+            background:linear-gradient(135deg, var(--brand-teal), #0a7d70);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:800;
+            font-size:14px;
+            color:#062420;
+            flex-shrink:0;
+        }
+
+        .logo-text{
+            color:#e9edf5;
+            font-weight:700;
+            letter-spacing:.5px;
+            font-size:15px;
+        }
+        .logo-text span{ color:var(--brand-teal); }
+
+        .kiosk-brand .tag{
+            font-size:9.5px;
+            letter-spacing:1.5px;
+            color:var(--ink-faint);
+            text-transform:uppercase;
+        }
+
+        /* ===== SCREEN ===== */
+        .screen{
+            background:linear-gradient(180deg, var(--screen-navy) 0%, var(--screen-navy-deep) 100%);
+            border-radius:12px;
+            border:3px solid #05080f;
+            box-shadow:
+                    inset 0 0 40px rgba(0,0,0,.6),
+                    inset 0 0 0 1px rgba(18,184,166,.08);
+            padding:20px 18px;
+            min-height:430px;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .screen::before{
+            content:"";
+            position:absolute;
+            inset:0;
+            background:repeating-linear-gradient(
+                    180deg,
+                    rgba(255,255,255,0.012) 0px,
+                    rgba(255,255,255,0.012) 1px,
+                    transparent 1px,
+                    transparent 3px
+            );
+            pointer-events:none;
+        }
+
+        .screen-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:baseline;
+            color:var(--ink-soft);
+            font-size:10.5px;
+            letter-spacing:1px;
+            text-transform:uppercase;
+            margin-bottom:14px;
+            font-family:var(--font-mono);
+        }
+        .screen-header .status-dot{
+            display:inline-block;
+            width:6px;height:6px;
+            border-radius:50%;
+            background:var(--lcd-green);
+            margin-right:6px;
+            box-shadow:0 0 6px var(--lcd-green);
+        }
+
+        .panel{ display:none; animation:fadeIn .25s ease; }
+        .panel.active{ display:block; }
+
+        @keyframes fadeIn{
+            from{ opacity:0; transform:translateY(4px); }
+            to{ opacity:1; transform:translateY(0); }
+        }
+
+        .panel-title{
+            color:#f2f5fa;
+            font-size:17px;
+            font-weight:700;
+            margin:2px 0 4px;
+        }
+        .panel-sub{
+            color:var(--ink-faint);
+            font-size:11.5px;
+            margin-bottom:18px;
+        }
+
+        /* ===== LOGIN PANEL ===== */
+        .field-label{
+            color:var(--ink-soft);
+            font-size:10.5px;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            margin-bottom:6px;
+            display:block;
+        }
+        .id-readout{
+            font-family:var(--font-mono);
+            color:var(--lcd-green);
+            background:rgba(75,224,138,.06);
+            border:1px solid rgba(75,224,138,.25);
+            border-radius:8px;
+            padding:10px 12px;
+            font-size:15px;
+            letter-spacing:2px;
+            margin-bottom:16px;
+        }
+
+        .pin-input-wrap{
+            position:relative;
+            margin-bottom:8px;
+        }
+
+        .pin-input{
+            width:100%;
+            background:rgba(255,255,255,.04);
+            border:1px solid var(--kiosk-trim);
+            border-radius:8px;
+            padding:12px 14px;
+            color:var(--lcd-amber);
+            font-family:var(--font-mono);
+            font-size:20px;
+            letter-spacing:8px;
+            outline:none;
+            transition:border-color .15s;
+        }
+        .pin-input:focus{ border-color:var(--brand-teal); }
+        .pin-input::placeholder{ letter-spacing:normal; color:var(--ink-faint); font-size:13px; }
+
+        .error-msg{
+            color:var(--danger);
+            font-size:11.5px;
+            min-height:16px;
+            margin:8px 0 4px;
+            font-family:var(--font-mono);
+        }
+
+        .btn{
+            width:100%;
+            border:none;
+            border-radius:9px;
+            padding:12px 14px;
+            font-size:13.5px;
+            font-weight:700;
+            letter-spacing:.4px;
+            cursor:pointer;
+            font-family:var(--font-display);
+            transition:transform .08s ease, filter .15s ease;
+        }
+        .btn:active{ transform:scale(.98); }
+
+        .btn-primary{
+            background:linear-gradient(135deg, var(--brand-teal), var(--brand-teal-dim));
+            color:#052420;
+            margin-top:10px;
+        }
+        .btn-primary:hover{ filter:brightness(1.08); }
+
+        .btn-ghost{
+            background:transparent;
+            border:1px solid var(--kiosk-trim);
+            color:var(--ink-soft);
+        }
+        .btn-ghost:hover{ border-color:var(--brand-teal); color:#fff; }
+
+        .btn-danger{
+            background:rgba(255,107,107,.12);
+            border:1px solid rgba(255,107,107,.4);
+            color:var(--danger);
+        }
+        .btn-danger:hover{ background:rgba(255,107,107,.2); }
+
+        /* ===== MENU PANEL ===== */
+        .balance-strip{
+            background:linear-gradient(135deg, rgba(18,184,166,.14), rgba(18,184,166,.03));
+            border:1px solid rgba(18,184,166,.3);
+            border-radius:10px;
+            padding:14px 16px;
+            margin-bottom:18px;
+        }
+        .balance-strip .label{
+            color:var(--ink-soft);
+            font-size:10px;
+            text-transform:uppercase;
+            letter-spacing:1.2px;
+        }
+        .balance-strip .amount{
+            font-family:var(--font-mono);
+            color:var(--lcd-green);
+            font-size:28px;
+            font-weight:700;
+            margin-top:4px;
+            text-shadow:0 0 12px rgba(75,224,138,.35);
+        }
+
+        .menu-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-bottom:12px;
+        }
+
+        .menu-btn{
+            background:var(--key-face);
+            border:1px solid var(--kiosk-trim);
+            border-radius:10px;
+            padding:16px 10px;
+            color:#e9edf5;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:6px;
+            cursor:pointer;
+            font-family:var(--font-display);
+            font-size:12px;
+            font-weight:600;
+            transition:background .15s, border-color .15s, transform .08s;
+        }
+        .menu-btn:hover{ background:var(--key-face-hi); border-color:var(--brand-teal); }
+        .menu-btn:active{ transform:scale(.97); }
+        .menu-btn .icon{ font-size:20px; }
+
+        /* ===== TRANSACTION PANELS ===== */
+        .amount-input{
+            width:100%;
+            background:rgba(255,255,255,.04);
+            border:1px solid var(--kiosk-trim);
+            border-radius:8px;
+            padding:12px 14px;
+            color:#f2f5fa;
+            font-family:var(--font-mono);
+            font-size:18px;
+            outline:none;
+            margin-bottom:6px;
+        }
+        .amount-input:focus{ border-color:var(--brand-teal); }
+
+        .quick-amounts{
+            display:flex;
+            gap:8px;
+            margin:10px 0 4px;
+        }
+        .quick-amounts button{
+            flex:1;
+            background:rgba(255,255,255,.03);
+            border:1px solid var(--kiosk-trim);
+            color:var(--ink-soft);
+            border-radius:7px;
+            padding:8px 4px;
+            font-family:var(--font-mono);
+            font-size:11.5px;
+            cursor:pointer;
+        }
+        .quick-amounts button:hover{ border-color:var(--brand-teal); color:#fff; }
+        .receipt{
+            background:rgba(255,255,255,.03);
+            border:1px dashed var(--kiosk-trim);
+            border-radius:8px;
+            padding:12px 14px;
+            font-family:var(--font-mono);
+            font-size:11.5px;
+            color:var(--ink-soft);
+            line-height:1.7;
+            margin-bottom:16px;
+        }
+        .receipt .row{ display:flex; justify-content:space-between; }
+        .receipt .ok{ color:var(--lcd-green); }
+
+        .btn-row{ display:flex; gap:10px; margin-top:14px; }
+        .btn-row .btn{ margin-top:0; }
+
+        /* ===== KEYPAD (visual only, decorative for ATM realism) ===== */
+        .keypad-deco{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:8px;
+            margin-top:18px;
+        }
+        .keypad-deco div{
+            background:var(--key-face);
+            border:1px solid var(--kiosk-trim);
+            border-radius:6px;
+            text-align:center;
+            padding:8px 0;
+            color:var(--ink-faint);
+            font-family:var(--font-mono);
+            font-size:12px;
+        }
+
+        .footer-note{
+            text-align:center;
+            color:var(--ink-faint);
+            font-size:9.5px;
+            letter-spacing:.6px;
+            margin-top:16px;
+            text-transform:uppercase;
+        }
+
+        .card-slot{
+            height:6px;
+            width:70px;
+            background:#05080f;
+            border-radius:3px;
+            margin:14px auto 0;
+            box-shadow:inset 0 1px 3px rgba(0,0,0,.8);
+        }
+    </style>
+</head>
+<body>
+
+<div class="kiosk">
+    <div class="kiosk-brand">
+        <div class="logo">
+            <div class="logo-mark">M</div>
+            <div class="logo-text">MARI<span>BANK</span></div>
+        </div>
+        <div class="tag">ATM Terminal</div>
+    </div>
+
+    <div class="screen">
+        <div class="screen-header">
+            <span><span class="status-dot"></span>ONLINE</span>
+            <span id="clock">--:--</span>
+        </div>
+
+        <!-- LOGIN PANEL -->
+        <div class="panel active" id="panel-login">
+            <div class="panel-title">Welcome</div>
+            <div class="panel-sub">Enter your PIN to access your account</div>
+
+            <label class="field-label">Account ID</label>
+            <div class="id-readout">10006381930</div>
+
+            <label class="field-label">PIN</label>
+            <div class="pin-input-wrap">
+                <input type="password" id="pinInput" class="pin-input" maxlength="4"
+                       inputmode="numeric" pattern="[0-9]*" placeholder="Enter 4-digit PIN">
+            </div>
+            <div class="error-msg" id="loginError"></div>
+
+            <button class="btn btn-primary" onclick="attemptLogin()">Enter</button>
+        </div>
+
+        <!-- MENU PANEL -->
+        <div class="panel" id="panel-menu">
+            <div class="panel-title">Account Menu</div>
+            <div class="panel-sub">Account 10006381930</div>
+
+            <div class="balance-strip">
+                <div class="label">Available Balance</div>
+                <div class="amount" id="menuBalance">$5000.00</div>
+            </div>
+
+            <div class="menu-grid">
+                <div class="menu-btn" onclick="showPanel('check')">
+                    <span class="icon">💳</span> Check Balance
+                </div>
+                <div class="menu-btn" onclick="showPanel('deposit')">
+                    <span class="icon">⬇️</span> Deposit
+                </div>
+                <div class="menu-btn" onclick="showPanel('withdraw')">
+                    <span class="icon">⬆️</span> Withdraw
+                </div>
+                <div class="menu-btn" onclick="logout()">
+                    <span class="icon">🚪</span> Exit / Logout
+                </div>
+            </div>
+        </div>
+
+        <!-- CHECK BALANCE PANEL -->
+        <div class="panel" id="panel-check">
+            <div class="panel-title">Balance Inquiry</div>
+            <div class="panel-sub">Account 10006381930</div>
+
+            <div class="receipt">
+                <div class="row"><span>Date</span><span id="checkDate"></span></div>
+                <div class="row"><span>Account</span><span>10006381930</span></div>
+                <div class="row"><span>Available Balance</span><span class="ok" id="checkBalance">$5000.00</span></div>
+            </div>
+
+            <button class="btn btn-ghost" onclick="showPanel('menu')">Back to Menu</button>
+        </div>
+
+        <!-- DEPOSIT PANEL -->
+        <div class="panel" id="panel-deposit">
+            <div class="panel-title">Deposit</div>
+            <div class="panel-sub">Enter amount to deposit</div>
+            <label class="field-label">Amount (USD)</label>
+            <input type="number" id="depositInput" class="amount-input" placeholder="0.00" min="0" step="0.01">
+            <div class="quick-amounts">
+                <button onclick="setAmount('depositInput',20)">$20</button>
+                <button onclick="setAmount('depositInput',50)">$50</button>
+                <button onclick="setAmount('depositInput',100)">$100</button>
+                <button onclick="setAmount('depositInput',500)">$500</button>
+            </div>
+            <div class="error-msg" id="depositError"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-ghost" onclick="showPanel('menu')">Cancel</button>
+                <button class="btn btn-primary" onclick="doDeposit()">Confirm Deposit</button>
+            </div>
+        </div>
+
+        <!-- WITHDRAW PANEL -->
+        <div class="panel" id="panel-withdraw">
+            <div class="panel-title">Withdraw</div>
+            <div class="panel-sub">Enter amount to withdraw</div>
+
+            <label class="field-label">Amount (USD)</label>
+            <input type="number" id="withdrawInput" class="amount-input" placeholder="0.00" min="0" step="0.01">
+            <div class="quick-amounts">
+                <button onclick="setAmount('withdrawInput',20)">$20</button>
+                <button onclick="setAmount('withdrawInput',50)">$50</button>
+                <button onclick="setAmount('withdrawInput',100)">$100</button>
+                <button onclick="setAmount('withdrawInput',500)">$500</button>
+            </div>
+            <div class="error-msg" id="withdrawError"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-ghost" onclick="showPanel('menu')">Cancel</button>
+                <button class="btn btn-primary" onclick="doWithdraw()">Confirm Withdraw</button>
+            </div>
+        </div>
+
+        <!-- RESULT PANEL (deposit/withdraw success) -->
+        <div class="panel" id="panel-result">
+            <div class="panel-title" id="resultTitle">Transaction Complete</div>
+            <div class="panel-sub">Please take your receipt</div>
+
+            <div class="receipt">
+                <div class="row"><span>Date</span><span id="resultDate"></span></div>
+                <div class="row"><span>Account</span><span>10006381930</span></div>
+                <div class="row" id="resultTxnRow"><span>Transaction</span><span id="resultTxn"></span></div>
+                <div class="row"><span>New Balance</span><span class="ok" id="resultBalance"></span></div>
+            </div>
+
+            <button class="btn btn-primary" onclick="showPanel('menu')">Back to Menu</button>
+        </div>
+
+        <!-- LOGOUT / GOODBYE PANEL -->
+        <div class="panel" id="panel-goodbye">
+            <div class="panel-title">Thank You</div>
+            <div class="panel-sub">Session ended. Please take your card.</div>
+            <div class="receipt">
+                <div class="row"><span>Have a nice day —</span><span class="ok">MariBank</span></div>
+            </div>
+            <button class="btn btn-primary" onclick="resetToLogin()">Start New Session</button>
+        </div>
+
+    </div>
+
+    <div class="card-slot"></div>
+    <div class="footer-note">MariBank ATM &middot; Secure Session Simulation</div>
+</div>
+
+<script>
+    // ===== Account state =====
+    const ACCOUNT_ID = "10006381930";
+    const CORRECT_PIN = "1104";
+    let balance = 5000.00;
+
+    // ===== Clock =====
+    function updateClock(){
+        const now = new Date();
+        document.getElementById('clock').textContent =
+            now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    }
+    updateClock();
+    setInterval(updateClock, 1000 * 30);
+
+    function fmt(n){
+        return '$' + n.toFixed(2);
+    }
+
+    function todayStr(){
+        return new Date().toLocaleString([], {
+            year:'numeric', month:'short', day:'2-digit',
+            hour:'2-digit', minute:'2-digit'
+        });
+    }
+
+    // ===== Panel switching =====
+    function showPanel(name){
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + name).classList.add('active');
+        if(name === 'check'){
+            document.getElementById('checkDate').textContent = todayStr();
+            document.getElementById('checkBalance').textContent = fmt(balance);
+        }
+        if(name === 'menu'){
+            document.getElementById('menuBalance').textContent = fmt(balance);
+        }
+        if(name === 'deposit'){
+            document.getElementById('depositInput').value = '';
+            document.getElementById('depositError').textContent = '';
+        }
+        if(name === 'withdraw'){
+            document.getElementById('withdrawInput').value = '';
+            document.getElementById('withdrawError').textContent = '';
+        }
+    }
+
+    function setAmount(inputId, val){
+        document.getElementById(inputId).value = val.toFixed(2);
+    }
+
+    // ===== PIN input: numeric only, masked automatically via type=password =====
+    const pinInput = document.getElementById('pinInput');
+    pinInput.addEventListener('input', () => {
+        pinInput.value = pinInput.value.replace(/[^0-9]/g, '').slice(0,4);
+        document.getElementById('loginError').textContent = '';
+    });
+    pinInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') attemptLogin();
+    });
+
+    // ===== Login =====
+    function attemptLogin(){
+        const entered = pinInput.value;
+        const errEl = document.getElementById('loginError');
+
+        if(entered.length !== 4){
+            errEl.textContent = 'Please enter a 4-digit PIN.';
+            return;
+        }
+        if(entered !== CORRECT_PIN){
+            errEl.textContent = 'Incorrect PIN. Please try again.';
+            pinInput.value = '';
+            pinInput.focus();
+            return;
+        }
+        errEl.textContent = '';
+        pinInput.value = '';
+        showPanel('menu');
+    }
+
+    // ===== Deposit =====
+    function doDeposit(){
+        const input = document.getElementById('depositInput');
+        const errEl = document.getElementById('depositError');
+        const amt = parseFloat(input.value);
+
+        if(isNaN(amt) || amt <= 0){
+            errEl.textContent = 'Enter a valid deposit amount greater than $0.';
+            return;
+        }
+        errEl.textContent = '';
+        balance += amt;
+        showResult('Deposit Successful', 'Deposit', fmt(amt));
+    }
+
+    // ===== Withdraw =====
+    function doWithdraw(){
+        const input = document.getElementById('withdrawInput');
+        const errEl = document.getElementById('withdrawError');
+        const amt = parseFloat(input.value);
+
+        if(isNaN(amt) || amt <= 0){
+            errEl.textContent = 'Enter a valid withdrawal amount greater than $0.';
+            return;
+        }
+        if(amt > balance){
+            errEl.textContent = Insufficient; balance. Available; $;{fmt(balance)};
+            return;
+        }
+        errEl.textContent = '';
+        balance -= amt;
+        showResult('Withdrawal Successful', 'Withdrawal', fmt(amt));
+    }
+
+    function showResult(title, txnLabel, txnAmount){
+        document.getElementById('resultTitle').textContent = title;
+        document.getElementById('resultDate').textContent = todayStr();
+        document.getElementById('resultTxnRow').innerHTML =
+            <span>${txnLabel}</span>
+        <span>${txnAmount}</span>;
+        document.getElementById('resultBalance').textContent = fmt(balance);
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-result').classList.add('active');
+    }
+
+    // ===== Logout =====
+    function logout(){
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-goodbye').classList.add('active');
+    }
+
+    function resetToLogin(){
+        balance = 5000.00; // reset demo balance for next session
+        pinInput.value = '';
+        document.getElementById('loginError').textContent = '';
+        showPanel('login');
+    }
+</script>
+
+</body>
+</html>

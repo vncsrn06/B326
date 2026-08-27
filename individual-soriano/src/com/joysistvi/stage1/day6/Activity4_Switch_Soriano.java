@@ -20,7 +20,7 @@ public class Activity4_Switch_Soriano {
                 System.out.println("You selected Option 1: View Grades");
                 break;
             case 2:
-                System.out.println("You selected Option 2: Enroll Subject");
+                System.out.println("You selected Option 2: Enroll S1ubject");
                 break;
             case 3:
                 System.out.println("You selected Option 3: Pay Tuition");

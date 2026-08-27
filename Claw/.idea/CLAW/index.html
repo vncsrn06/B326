@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CLAW MACHINE // HANNAH</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- PRESS START SCREEN -->
+<section id="start-screen" class="screen active">
+    <h1 class="arcade-logo">CLAW<br>MACHINE</h1>
+    <p class="logo-sub">A GAME FOR HANNAH</p>
+    <div class="heart-row">♥ ♥ ♥ ♥ ♥</div>
+    <p class="press-start" id="press-start-text">PRESS START</p>
+    <p class="coin-line">1 PLAYER &nbsp;&nbsp; ♥ INSERT LOVE TO CONTINUE ♥</p>
+</section>
+
+<!-- GAME SCREEN -->
+<section id="game-screen" class="screen">
+    <div class="cab-wrap">
+        <div class="marquee pixel-border">
+            <h1>★ CLAW MACHINE ★</h1>
+            <div class="bulb-row">
+                <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+                <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+                <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+            </div>
+        </div>
+
+        <div class="hud-row">
+            <span class="hud-label pixel-font">SCORE</span>
+            <span class="hud-score pixel-font"><span id="score">00</span>/10</span>
+        </div>
+
+        <div class="tray" id="tray"></div>
+
+        <div class="cabinet">
+            <div class="cab-grid"></div>
+            <div class="rail"></div>
+            <div class="claw" id="claw">
+                <div class="claw-string" id="clawString"></div>
+                <div class="claw-head">
+                    <div class="claw-prong left"></div>
+                    <div class="claw-bar"></div>
+                    <div class="claw-prong right"></div>
+                </div>
+                <div class="claw-cargo" id="clawCargo"></div>
+            </div>
+            <div id="plushieLayer"></div>
+            <div class="floor"></div>
+            <div class="toast" id="toast"></div>
+        </div>
+
+        <div class="control-panel">
+            <div class="dpad">
+                <div class="blank"></div><div class="blank"></div><div class="blank"></div>
+                <button class="dpad-btn" id="leftBtn">◀</button>
+                <div class="blank"></div>
+                <button class="dpad-btn" id="rightBtn">▶</button>
+                <div class="blank"></div><div class="blank"></div><div class="blank"></div>
+            </div>
+            <button class="drop-btn-big" id="dropBtn">DROP</button>
+        </div>
+        <p class="hint">LINE UP THE CLAW, THEN PRESS DROP · ARROW KEYS + SPACE WORK TOO</p>
+    </div>
+</section>
+
+<!-- WIN OVERLAY -->
+<div class="win-overlay" id="winOverlay">
+    <p class="win-title pixel-font">YOU WIN!</p>
+    <div class="win-emojis">🎉 🎉 🎉</div>
+    <p class="win-sub">You caught all ten, Hannah. Ten plushies, ten little reasons... but there's one more thing.</p>
+    <button class="btn cyan" id="toLetterBtn" style="margin-top:24px;">OPEN LETTER ♥</button>
+</div>
+
+<!-- LETTER SCREEN -->
+<section id="letter-screen" class="screen">
+    <h1 class="pixel-font letter-title">ONE MORE THING</h1>
+    <p class="logo-sub" style="margin-top:12px;">TAP THE ENVELOPE TO OPEN IT</p>
+
+    <div class="envelope-wrap">
+        <div class="envelope" id="envelope">
+            <div class="env-back"></div>
+            <div class="env-letter"></div>
+            <div class="heart-seal">♥</div>
+            <div class="env-flap"></div>
+        </div>
+    </div>
+
+    <div class="letter-card" id="letterCard">
+        <h2>DEAR HANNAH,</h2>
+        <textarea class="letter-body" id="letterBody" placeholder="Write your message to Hannah here...">[Write your letter here.]</textarea>
+        <div class="letter-sign">— LOVE, [YOUR NAME]</div>
+    </div>
+
+    <div class="row">
+        <button class="btn pink" id="replayBtn">PLAY AGAIN</button>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
