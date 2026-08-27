@@ -1,298 +1,1088 @@
-/* ============ PIXEL PLUSHIE SPRITES ============ */
-/* 16 x 20 pixel grid. Each plushie shares the same chibi silhouette
-   (SIL) but gets its own colors, ear shape, and a small "extra" detail
-   so every prize actually looks like its own toy instead of a flat emoji. */
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-const SIL = [
-    null, null, null, null,      // 0-3  (reserved for ears / horn)
-    [6, 9],                      // 4  head top
-    [5, 10],                     // 5
-    [4, 11],                     // 6
-    [4, 11],                     // 7
-    [4, 11],                     // 8
-    [4, 11],                     // 9
-    [5, 10],                     // 10 neck
-    [3, 12],                     // 11 shoulders
-    [2, 13],                     // 12
-    [2, 13],                     // 13
-    [1, 14],                     // 14 body
-    [1, 14],                     // 15
-    [1, 14],                     // 16
-    [1, 14],                     // 17
-    [2, 13],                     // 18
-    [3, 12],                     // 19 base
-];
+const claw =
+    document.getElementById("claw");
 
-function px(ctx, x, y, color, w = 1, h = 1) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
-}
+const glass =
+    document.querySelector(".glass");
 
-function drawEars(ctx, type, color) {
-    if (!type || type === 'none') return;
-    if (type === 'round') {
-        px(ctx, 4, 3, color, 2, 2);
-        px(ctx, 10, 3, color, 2, 2);
-    } else if (type === 'big') {
-        px(ctx, 3, 2, color, 3, 3);
-        px(ctx, 10, 2, color, 3, 3);
-    } else if (type === 'long') {
-        px(ctx, 6, 0, color, 2, 4);
-        px(ctx, 8, 0, color, 2, 4);
-    } else if (type === 'floppy') {
-        px(ctx, 3, 6, color, 2, 3);
-        px(ctx, 11, 6, color, 2, 3);
-    } else if (type === 'triangle') {
-        const left = [[4,2],[5,2],[4,3],[5,3],[3,4],[4,4]];
-        left.forEach(([x, y]) => px(ctx, x, y, color));
-        left.forEach(([x, y]) => px(ctx, 15 - x, y, color));
-    }
-}
+const plushies =
+    document.querySelectorAll(".plushie");
 
-function drawFace(ctx, cfg) {
-    if (cfg.eyeStyle === 'bulge') {
-        px(ctx, 5, 2, '#ffffff', 2, 2);
-        px(ctx, 9, 2, '#ffffff', 2, 2);
-        px(ctx, 6, 3, '#1a1a1a');
-        px(ctx, 9, 3, '#1a1a1a');
-    } else {
-        px(ctx, 6, 8, '#1a1a1a');
-        px(ctx, 9, 8, '#1a1a1a');
-    }
-    if (cfg.snout) {
-        px(ctx, 7, 9, cfg.snout, 2, 1);
-    }
-    if (cfg.blush !== false) {
-        ctx.globalAlpha = 0.55;
-        px(ctx, 4, 9, '#ff9ab8');
-        px(ctx, 11, 9, '#ff9ab8');
-        ctx.globalAlpha = 1;
-    }
-}
+const startButton =
+    document.getElementById("startGame");
 
-function drawPlushie(ctx, cfg) {
-    ctx.clearRect(0, 0, 16, 20);
-    SIL.forEach((range, y) => {
-        if (range) px(ctx, range[0], y, cfg.body, range[1] - range[0] + 1, 1);
-    });
-    drawEars(ctx, cfg.earType, cfg.earColor || cfg.body);
-    drawFace(ctx, cfg);
-    if (cfg.extra) cfg.extra(ctx);
-}
+const leftButton =
+    document.getElementById("leftButton");
 
-function makeSpriteCanvas(cfg) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 16;
-    canvas.height = 20;
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
-    drawPlushie(ctx, cfg);
-    return canvas;
-}
+const rightButton =
+    document.getElementById("rightButton");
 
-/* ============ THE 10 PRIZES ============ */
-const PLUSHIES = [
-    { name: 'Bear',    pos: 5,  body: '#8a5a3c', earColor: '#6e4530', earType: 'round',
-        snout: '#d9b38c' },
-    { name: 'Bunny',   pos: 15, body: '#f5eee6', earColor: '#f3b6cf', earType: 'long',
-        snout: '#f3b6cf' },
-    { name: 'Cat',     pos: 25, body: '#e0a94a', earColor: '#c98d31', earType: 'triangle',
-        snout: '#c98d31',
-        extra: (ctx) => { px(ctx, 1, 9, '#3a2a1a'); px(ctx, 14, 9, '#3a2a1a'); } },
-    { name: 'Puppy',   pos: 35, body: '#c99a6b', earColor: '#8a5f38', earType: 'floppy',
-        snout: '#5a3d24',
-        extra: (ctx) => { px(ctx, 5, 13, '#8a5f38'); px(ctx, 10, 15, '#8a5f38', 2, 1); } },
-    { name: 'Fox',     pos: 45, body: '#ea7a30', earColor: '#ea7a30', earType: 'triangle',
-        snout: '#ffffff',
-        extra: (ctx) => { px(ctx, 4, 2, '#1a1a1a'); px(ctx, 11, 2, '#1a1a1a');
-            px(ctx, 6, 13, '#ffffff', 4, 2); } },
-    { name: 'Panda',   pos: 55, body: '#ffffff', earColor: '#1a1a1a', earType: 'round',
-        snout: '#1a1a1a', blush: false,
-        extra: (ctx) => { px(ctx, 5, 7, '#1a1a1a', 2, 2); px(ctx, 9, 7, '#1a1a1a', 2, 2); } },
-    { name: 'Koala',   pos: 65, body: '#a9b0b6', earColor: '#c7ccd1', earType: 'big',
-        snout: '#5b6672' },
-    { name: 'Unicorn', pos: 75, body: '#f7d7ea', earColor: '#f0aed0', earType: 'round',
-        snout: '#f0aed0',
-        extra: (ctx) => {
-            px(ctx, 7, 1, '#ffd873', 1, 2); px(ctx, 8, 0, '#ffd873', 1, 2);
-            const colors = ['#ff5f5f', '#ffbb4c', '#ffe14d', '#8ee08a', '#4cc9f5'];
-            colors.forEach((c, i) => px(ctx, 3, 6 + i, c));
-        } },
-    { name: 'Piggy',   pos: 85, body: '#f6b8c6', earColor: '#e893a9', earType: 'round',
-        snout: '#e893a9',
-        extra: (ctx) => { px(ctx, 7, 9, '#c9647f'); px(ctx, 8, 9, '#c9647f'); } },
-    { name: 'Froggy',  pos: 95, body: '#8fd694', earColor: null, earType: 'none',
-        eyeStyle: 'bulge', blush: false,
-        extra: (ctx) => { px(ctx, 6, 11, '#4f9f57', 4, 1); } },
-];
+const grabButton =
+    document.getElementById("grabButton");
 
-/* ============ GAME LOGIC ============ */
-let clawPos = 50;
-let collected = 0;
+const messageTitle =
+    document.getElementById("messageTitle");
+
+const message =
+    document.getElementById("message");
+
+const count =
+    document.getElementById("count");
+
+const messageModal =
+    document.getElementById("messageModal");
+
+const modalTeddy =
+    document.getElementById("modalTeddy");
+
+const modalTitle =
+    document.getElementById("modalTitle");
+
+const modalMessage =
+    document.getElementById("modalMessage");
+
+const closeModal =
+    document.getElementById("closeModal");
+
+const continueButton =
+    document.getElementById("continueButton");
+
+
+/* =====================================================
+   GAME STATE
+===================================================== */
+
+let gameStarted = false;
+
 let busy = false;
-const CATCH_RADIUS = 5;
 
-const startScreen = document.getElementById('start-screen');
-const gameScreen = document.getElementById('game-screen');
-const letterScreen = document.getElementById('letter-screen');
-const winOverlay = document.getElementById('winOverlay');
+let clawPosition = 50;
 
-const claw = document.getElementById('claw');
-const clawString = document.getElementById('clawString');
-const clawCargo = document.getElementById('clawCargo');
-const plushieLayer = document.getElementById('plushieLayer');
-const scoreEl = document.getElementById('score');
-const tray = document.getElementById('tray');
-const toast = document.getElementById('toast');
+let collected = 0;
 
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
+let carrying = null;
 
-function showScreen(el) {
-    [startScreen, gameScreen, letterScreen].forEach((s) => s.classList.remove('active'));
-    el.classList.add('active');
-}
+let carryingAnimation = null;
 
-function buildTray() {
-    tray.innerHTML = '';
-    PLUSHIES.forEach((p, i) => {
-        const slot = document.createElement('div');
-        slot.className = 'tray-slot';
-        slot.id = 'slot-' + i;
-        tray.appendChild(slot);
-    });
-}
 
-function buildPlushies() {
-    plushieLayer.innerHTML = '';
-    PLUSHIES.forEach((p, i) => {
-        const el = document.createElement('div');
-        el.className = 'plushie';
-        el.id = 'plushie-' + i;
-        el.style.left = p.pos + '%';
-        el.dataset.caught = 'false';
-        el.appendChild(makeSpriteCanvas(p));
-        plushieLayer.appendChild(el);
-    });
-}
+/* =====================================================
+   LOVE MESSAGES
+===================================================== */
 
-function resetGame() {
-    collected = 0;
-    scoreEl.textContent = pad(0);
-    clawPos = 50;
-    claw.style.left = clawPos + '%';
-    clawString.style.height = '0px';
-    clawCargo.classList.remove('show');
-    clawCargo.innerHTML = '';
-    buildTray();
-    buildPlushies();
-    winOverlay.classList.remove('active');
-}
+const loveMessages = {
 
-function moveClaw(delta) {
-    if (busy) return;
-    clawPos = Math.min(95, Math.max(5, clawPos + delta));
-    claw.style.left = clawPos + '%';
-}
+    1:
+        "You make my world brighter just by being in it. I hope this little teddy reminds you how special you are to me. 💗",
 
-function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 900);
-}
+    2:
+        "Every time I think about you, I smile. You have a special place in my heart that nobody else could ever replace. ❤️",
 
-function dropClaw() {
-    if (busy || collected >= 10) return;
-    busy = true;
-    clawString.style.height = '150px';
+    3:
+        "Even the simplest moments become special when I'm with you. Thank you for being someone I can laugh and make memories with. 🥰",
 
-    setTimeout(() => {
-        let target = null;
-        let bestDist = CATCH_RADIUS + 1;
-        PLUSHIES.forEach((p, i) => {
-            const el = document.getElementById('plushie-' + i);
-            if (el.dataset.caught === 'false') {
-                const dist = Math.abs(p.pos - clawPos);
-                if (dist < bestDist) {
-                    bestDist = dist;
-                    target = i;
-                }
-            }
-        });
+    4:
+        "Whenever you need a reminder that you're loved, remember this little teddy and remember me. You mean so much to me. 💕",
 
-        if (target !== null) {
-            const el = document.getElementById('plushie-' + target);
-            el.dataset.caught = 'true';
-            el.classList.add('gone');
-            clawCargo.innerHTML = '';
-            clawCargo.appendChild(makeSpriteCanvas(PLUSHIES[target]));
-            clawCargo.classList.add('show');
-            showToast('GOTCHA!');
+    5:
+        "You deserve all the happiness in the world. I hope I can always be one of the people who makes you smile. 🌸",
 
-            setTimeout(() => {
-                clawString.style.height = '0px';
-                setTimeout(() => {
-                    const slot = document.getElementById('slot-' + target);
-                    slot.innerHTML = '';
-                    slot.appendChild(makeSpriteCanvas(PLUSHIES[target]));
-                    slot.classList.add('filled');
-                    clawCargo.classList.remove('show');
-                    clawCargo.innerHTML = '';
-                    collected++;
-                    scoreEl.textContent = pad(collected);
-                    busy = false;
+    6:
+        "Sometimes I randomly think about you and smile. You're honestly one of my favorite thoughts every day. 💗",
 
-                    if (collected >= 10) {
-                        setTimeout(() => winOverlay.classList.add('active'), 500);
-                    }
-                }, 500);
-            }, 350);
-        } else {
-            showToast('MISSED!');
-            setTimeout(() => {
-                clawString.style.height = '0px';
-                setTimeout(() => { busy = false; }, 500);
-            }, 250);
-        }
-    }, 500);
-}
+    7:
+        "I don't need a perfect life. I just want more memories with you, more laughs, more conversations, and more adventures together. ❤️",
+
+    8:
+        "If I could put one hug inside every teddy, this whole machine would be full of hugs just for you. 🧸💞",
+
+    9:
+        "You're not just someone I love. You're also someone I genuinely enjoy having in my life. That means more than you know. 💕",
+
+    10:
+        "YOU GOT THE FINAL TEDDY! 🎉 But the real prize was never inside this machine. The real prize is having you in my life. I love you so much. ❤️"
+
+};
+
+
+/* =====================================================
+   START
+===================================================== */
+
+startButton.addEventListener(
+    "click",
+    startGame
+);
+
 
 function startGame() {
-    resetGame();
-    showScreen(gameScreen);
+
+    gameStarted = true;
+
+    startButton.disabled =
+        true;
+
+    startButton.textContent =
+        "♥ GAME STARTED ♥";
+
+
+    messageTitle.textContent =
+        "🎮 LET'S PLAY!";
+
+
+    message.textContent =
+        "Move the claw over a teddy and press GRAB! 💗";
+
 }
 
-startScreen.addEventListener('click', startGame);
 
-document.addEventListener('keydown', (e) => {
-    if (startScreen.classList.contains('active') && (e.code === 'Enter' || e.code === 'Space')) {
-        e.preventDefault();
-        startGame();
+/* =====================================================
+   MOVE LEFT
+===================================================== */
+
+leftButton.addEventListener(
+    "click",
+    moveLeft
+);
+
+
+function moveLeft() {
+
+    if (
+        !gameStarted ||
+        busy
+    ) {
+        return;
     }
-    if (!gameScreen.classList.contains('active')) return;
-    if (e.code === 'ArrowLeft') moveClaw(-6);
-    if (e.code === 'ArrowRight') moveClaw(6);
-    if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); dropClaw(); }
-});
 
-document.getElementById('leftBtn').addEventListener('click', (e) => { e.stopPropagation(); moveClaw(-6); });
-document.getElementById('rightBtn').addEventListener('click', (e) => { e.stopPropagation(); moveClaw(6); });
-document.getElementById('dropBtn').addEventListener('click', (e) => { e.stopPropagation(); dropClaw(); });
 
-document.getElementById('toLetterBtn').addEventListener('click', () => {
-    winOverlay.classList.remove('active');
-    showScreen(letterScreen);
-});
+    clawPosition -= 5;
 
-const envelope = document.getElementById('envelope');
-const letterCard = document.getElementById('letterCard');
-envelope.addEventListener('click', () => {
-    envelope.classList.add('open');
-    setTimeout(() => letterCard.classList.add('show'), 350);
-});
 
-document.getElementById('replayBtn').addEventListener('click', () => {
-    envelope.classList.remove('open');
-    letterCard.classList.remove('show');
-    resetGame();
-    showScreen(gameScreen);
-});
+    if (
+        clawPosition < 8
+    ) {
+
+        clawPosition = 8;
+
+    }
+
+
+    updateClaw();
+
+}
+
+
+/* =====================================================
+   MOVE RIGHT
+===================================================== */
+
+rightButton.addEventListener(
+    "click",
+    moveRight
+);
+
+
+function moveRight() {
+
+    if (
+        !gameStarted ||
+        busy
+    ) {
+        return;
+    }
+
+
+    clawPosition += 5;
+
+
+    if (
+        clawPosition > 92
+    ) {
+
+        clawPosition = 92;
+
+    }
+
+
+    updateClaw();
+
+}
+
+
+/* =====================================================
+   UPDATE CLAW
+===================================================== */
+
+function updateClaw() {
+
+    claw.style.left =
+        clawPosition + "%";
+
+}
+
+
+/* =====================================================
+   GET CLOSEST TEDDY
+===================================================== */
+
+function getTargetTeddy() {
+
+    const glassRect =
+        glass.getBoundingClientRect();
+
+
+    const clawCenter =
+        glassRect.left +
+        (
+            clawPosition / 100
+        ) *
+        glassRect.width;
+
+
+    let target = null;
+
+    let closestDistance =
+        Infinity;
+
+
+    plushies.forEach(
+        plushie => {
+
+            if (
+                plushie.style.display ===
+                "none"
+            ) {
+                return;
+            }
+
+
+            if (
+                plushie.classList.contains(
+                    "collected"
+                )
+            ) {
+                return;
+            }
+
+
+            const rect =
+                plushie.getBoundingClientRect();
+
+
+            const center =
+                rect.left +
+                rect.width / 2;
+
+
+            const distance =
+                Math.abs(
+                    center -
+                    clawCenter
+                );
+
+
+            if (
+                distance <
+                closestDistance
+            ) {
+
+                closestDistance =
+                    distance;
+
+                target =
+                    plushie;
+
+            }
+
+        }
+    );
+
+
+    /*
+       Player has to be reasonably close.
+    */
+
+    if (
+        closestDistance > 55
+    ) {
+
+        return null;
+
+    }
+
+
+    return target;
+
+}
+
+
+/* =====================================================
+   GRAB
+===================================================== */
+
+grabButton.addEventListener(
+    "click",
+    grab
+);
+
+
+function grab() {
+
+    if (
+        !gameStarted ||
+        busy ||
+        carrying
+    ) {
+        return;
+    }
+
+
+    busy = true;
+
+
+    const target =
+        getTargetTeddy();
+
+
+    /* =========================================
+       MISS
+    ========================================= */
+
+    if (!target) {
+
+        messageTitle.textContent =
+            "😅 MISSED!";
+
+
+        message.textContent =
+            "Move the claw closer to a teddy and try again!";
+
+
+        claw.classList.add(
+            "grabbing"
+        );
+
+
+        setTimeout(() => {
+
+            claw.classList.remove(
+                "grabbing"
+            );
+
+
+            busy = false;
+
+        }, 450);
+
+
+        return;
+
+    }
+
+
+    /* =========================================
+       CLOSE CLAW
+    ========================================= */
+
+    claw.classList.add(
+        "grabbing"
+    );
+
+
+    messageTitle.textContent =
+        "🤏 GRABBING...";
+
+
+    message.textContent =
+        "The claw is grabbing the teddy...";
+
+
+    /* =========================================
+       GO DOWN
+    ========================================= */
+
+    claw.style.top =
+        "170px";
+
+
+    /*
+       Wait for claw to arrive.
+    */
+
+    setTimeout(() => {
+
+        attachTeddy(target);
+
+    }, 750);
+
+
+    /* =========================================
+       GO UP
+    ========================================= */
+
+    setTimeout(() => {
+
+        claw.style.top =
+            "0";
+
+    }, 1250);
+
+
+    /*
+       Go to prize chute.
+    */
+
+    setTimeout(() => {
+
+        claw.style.left =
+            "18%";
+
+    }, 1950);
+
+
+    /*
+       Release teddy.
+    */
+
+    setTimeout(() => {
+
+        releaseTeddy(
+            target
+        );
+
+    }, 2600);
+
+
+    /*
+       Finish.
+    */
+
+    setTimeout(() => {
+
+        claw.classList.remove(
+            "grabbing"
+        );
+
+
+        claw.style.top =
+            "0";
+
+
+        claw.style.left =
+            clawPosition + "%";
+
+
+        busy = false;
+
+
+    }, 3400);
+
+}
+
+
+/* =====================================================
+   ATTACH TEDDY
+===================================================== */
+
+function attachTeddy(
+    teddy
+) {
+
+    carrying =
+        teddy;
+
+
+    /*
+       Remove bottom positioning.
+    */
+
+    teddy.style.bottom =
+        "auto";
+
+
+    teddy.style.transition =
+        "none";
+
+
+    /*
+       It becomes visually attached
+       to the claw.
+    */
+
+    carryTeddy();
+
+}
+
+
+/* =====================================================
+   CONTINUOUS TEDDY FOLLOW
+===================================================== */
+
+function carryTeddy() {
+
+    if (
+        !carrying
+    ) {
+        return;
+    }
+
+
+    const glassRect =
+        glass.getBoundingClientRect();
+
+
+    const clawRect =
+        claw.getBoundingClientRect();
+
+
+    /*
+       Calculate teddy position
+       based on current claw position.
+    */
+
+    const teddyWidth =
+        carrying.offsetWidth;
+
+
+    const teddyHeight =
+        carrying.offsetHeight;
+
+
+    const left =
+        clawRect.left -
+        glassRect.left +
+        (
+            clawRect.width -
+            teddyWidth
+        ) / 2;
+
+
+    const top =
+        clawRect.top -
+        glassRect.top +
+        105;
+
+
+    carrying.style.left =
+        left + "px";
+
+
+    carrying.style.top =
+        top + "px";
+
+
+    carryingAnimation =
+        requestAnimationFrame(
+            carryTeddy
+        );
+
+}
+
+
+/* =====================================================
+   RELEASE TEDDY
+===================================================== */
+
+function releaseTeddy(
+    teddy
+) {
+
+    /*
+       Stop continuous following.
+    */
+
+    carrying = null;
+
+
+    if (
+        carryingAnimation
+    ) {
+
+        cancelAnimationFrame(
+            carryingAnimation
+        );
+
+        carryingAnimation =
+            null;
+
+    }
+
+
+    /*
+       Get prize chute.
+    */
+
+    const chute =
+        document.querySelector(
+            ".prize-chute"
+        );
+
+
+    const glassRect =
+        glass.getBoundingClientRect();
+
+
+    const chuteRect =
+        chute.getBoundingClientRect();
+
+
+    /*
+       Current teddy position.
+    */
+
+    const currentRect =
+        teddy.getBoundingClientRect();
+
+
+    const currentLeft =
+        currentRect.left -
+        glassRect.left;
+
+
+    const currentTop =
+        currentRect.top -
+        glassRect.top;
+
+
+    /*
+       Target position.
+    */
+
+    const targetLeft =
+        chuteRect.left -
+        glassRect.left +
+        (
+            chuteRect.width -
+            teddy.offsetWidth
+        ) / 2;
+
+
+    const targetTop =
+        chuteRect.top -
+        glassRect.top -
+        55;
+
+
+    /*
+       Put teddy back into glass.
+    */
+
+    glass.appendChild(
+        teddy
+    );
+
+
+    teddy.style.position =
+        "absolute";
+
+
+    teddy.style.left =
+        currentLeft + "px";
+
+
+    teddy.style.top =
+        currentTop + "px";
+
+
+    teddy.style.bottom =
+        "auto";
+
+
+    teddy.style.transition =
+        "none";
+
+
+    teddy.style.transform =
+        "none";
+
+
+    /*
+       Force starting position.
+    */
+
+    void teddy.offsetWidth;
+
+
+    /*
+       Move smoothly above prize chute.
+    */
+
+    teddy.style.transition =
+        "left .45s ease-out, top .45s ease-out";
+
+
+    teddy.style.left =
+        targetLeft + "px";
+
+
+    teddy.style.top =
+        targetTop + "px";
+
+
+    /*
+       Drop.
+    */
+
+    setTimeout(() => {
+
+        teddy.classList.add(
+            "falling"
+        );
+
+
+        teddy.style.transition =
+            "top .65s cubic-bezier(.15,.8,.3,1)";
+
+
+        teddy.style.top =
+            (
+                targetTop +
+                62
+            ) + "px";
+
+
+    }, 450);
+
+
+    /*
+       Count.
+    */
+
+    collected++;
+
+    count.textContent =
+        collected;
+
+
+    /*
+       Show basic message.
+    */
+
+    const id =
+        teddy.dataset.id;
+
+
+    messageTitle.textContent =
+        "🧸 TEDDY #" + id;
+
+
+    message.textContent =
+        "Your teddy is waiting for you! Open it for a message. 💗";
+
+
+    /*
+       Open the message automatically
+       after the teddy lands.
+    */
+
+    setTimeout(() => {
+
+        openMessage(id);
+
+    }, 1150);
+
+}
+
+
+/* =====================================================
+   OPEN TEDDY MESSAGE
+===================================================== */
+
+function openMessage(
+    id
+) {
+
+    modalTeddy.textContent =
+        getTeddyEmoji(id);
+
+
+    modalTitle.textContent =
+        "💗 Teddy #" + id;
+
+
+    modalMessage.textContent =
+        loveMessages[id];
+
+
+    messageModal.classList.remove(
+        "hidden"
+    );
+
+
+    createHearts();
+
+}
+
+
+/* =====================================================
+   CLOSE MESSAGE
+===================================================== */
+
+closeModal.addEventListener(
+    "click",
+    closeMessage
+);
+
+
+continueButton.addEventListener(
+    "click",
+    closeMessage
+);
+
+
+function closeMessage() {
+
+    messageModal.classList.add(
+        "hidden"
+    );
+
+
+    /*
+       Final message.
+    */
+
+    if (
+        collected === 10
+    ) {
+
+        showFinal();
+
+    }
+
+}
+
+
+/* =====================================================
+   TEDDY EMOJI
+===================================================== */
+
+function getTeddyEmoji(
+    id
+) {
+
+    const teddies = [
+
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸",
+        "🧸"
+
+    ];
+
+
+    return teddies[id - 1];
+
+}
+
+
+/* =====================================================
+   FINAL
+===================================================== */
+
+function showFinal() {
+
+    messageTitle.textContent =
+        "🎉 ALL 10 TEDDIES!";
+
+
+    message.textContent =
+        "You opened every little message. " +
+        "But the biggest prize isn't inside the machine. " +
+        "It's having you in my life. ❤️";
+
+
+    createManyHearts();
+
+}
+
+
+/* =====================================================
+   HEARTS
+===================================================== */
+
+function createHearts() {
+
+    for (
+        let i = 0;
+        i < 10;
+        i++
+    ) {
+
+        const heart =
+            document.createElement(
+                "div"
+            );
+
+
+        heart.textContent =
+            "♥";
+
+
+        heart.style.position =
+            "fixed";
+
+
+        heart.style.left =
+            (
+                15 +
+                Math.random() * 70
+            ) + "%";
+
+
+        heart.style.top =
+            (
+                45 +
+                Math.random() * 30
+            ) + "%";
+
+
+        heart.style.color =
+            "#ff6f9f";
+
+
+        heart.style.fontSize =
+            (
+                16 +
+                Math.random() * 18
+            ) + "px";
+
+
+        heart.style.zIndex =
+            "9999";
+
+
+        heart.style.pointerEvents =
+            "none";
+
+
+        document.body.appendChild(
+            heart
+        );
+
+
+        const animation =
+            heart.animate(
+
+                [
+
+                    {
+                        transform:
+                            "translateY(0) scale(1)",
+
+                        opacity: 1
+
+                    },
+
+                    {
+
+                        transform:
+                            "translateY(-140px) scale(1.4)",
+
+                        opacity: 0
+
+                    }
+
+                ],
+
+                {
+
+                    duration:
+                        900 +
+                        Math.random() * 500,
+
+                    easing:
+                        "ease-out"
+
+                }
+
+            );
+
+
+        animation.onfinish =
+            () => {
+
+                heart.remove();
+
+            };
+
+    }
+
+}
+
+
+/* =====================================================
+   MANY HEARTS
+===================================================== */
+
+function createManyHearts() {
+
+    for (
+        let i = 0;
+        i < 5;
+        i++
+    ) {
+
+        setTimeout(
+            createHearts,
+            i * 200
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "ArrowLeft"
+        ) {
+
+            event.preventDefault();
+
+            moveLeft();
+
+        }
+
+
+        if (
+            event.key ===
+            "ArrowRight"
+        ) {
+
+            event.preventDefault();
+
+            moveRight();
+
+        }
+
+
+        if (
+            event.code ===
+            "Space"
+        ) {
+
+            event.preventDefault();
+
+            grab();
+
+        }
+
+    }
+);

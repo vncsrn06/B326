@@ -12,7 +12,7 @@ public class Activity5_Soriano {
         System.out.println(" === LOGIN MARIBANK === ");
 
         System.out.println("ID: " + correctID);
-
+1
         System.out.print("PIN: ");
         String enteredPIN=sc.nextLine();
 

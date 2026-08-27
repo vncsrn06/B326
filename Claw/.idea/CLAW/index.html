@@ -1,116 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-        <html lang="en">
-        <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CLAW MACHINE // HANNAH</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Love Claw Machine 💗</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- PRESS START SCREEN -->
-<section id="start-screen" class="screen active">
-    <h1 class="arcade-logo">CLAW<br>MACHINE</h1>
-    <p class="logo-sub">A GAME FOR HANNAH</p>
-    <div class="heart-row">♥ ♥ ♥ ♥ ♥</div>
-    <p class="press-start" id="press-start-text">PRESS START</p>
-    <p class="coin-line">1 PLAYER &nbsp;&nbsp; ♥ INSERT LOVE TO CONTINUE ♥</p>
-</section>
+<div class="wrapper">
 
-<!-- GAME SCREEN -->
-<section id="game-screen" class="screen">
-    <div class="cab-wrap">
-        <div class="marquee pixel-border">
-            <h1>★ CLAW MACHINE ★</h1>
-            <div class="bulb-row">
-                <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-                <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-                <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-            </div>
+  <h1>
+    <span>LOVE</span> CLAW MACHINE
+  </h1>
+
+  <button id="startGame" class="start-button">
+    ♥ START GAME ♥
+  </button>
+
+
+  <!-- =========================
+       MACHINE
+  ========================== -->
+
+  <div class="machine">
+
+    <div class="glass">
+
+      <!-- CLaw -->
+
+      <div id="claw" class="claw">
+
+        <div class="rope"></div>
+
+        <div class="claw-head">
+          <div class="claw-light"></div>
         </div>
 
-        <div class="hud-row">
-            <span class="hud-label pixel-font">SCORE</span>
-            <span class="hud-score pixel-font"><span id="score">00</span>/10</span>
+        <div class="claw-arm left-arm"></div>
+        <div class="claw-arm right-arm"></div>
+
+      </div>
+
+
+      <!-- =========================
+           TEDDY BEARS
+      ========================== -->
+
+      <div class="plushies">
+
+        <div class="pix plushie teddy1" data-id="1">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
         </div>
 
-        <div class="tray" id="tray"></div>
 
-        <div class="cabinet">
-            <div class="cab-grid"></div>
-            <div class="rail"></div>
-            <div class="claw" id="claw">
-                <div class="claw-string" id="clawString"></div>
-                <div class="claw-head">
-                    <div class="claw-prong left"></div>
-                    <div class="claw-bar"></div>
-                    <div class="claw-prong right"></div>
-                </div>
-                <div class="claw-cargo" id="clawCargo"></div>
-            </div>
-            <div id="plushieLayer"></div>
-            <div class="floor"></div>
-            <div class="toast" id="toast"></div>
+        <div class="pix plushie teddy2" data-id="2">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
         </div>
 
-        <div class="control-panel">
-            <div class="dpad">
-                <div class="blank"></div><div class="blank"></div><div class="blank"></div>
-                <button class="dpad-btn" id="leftBtn">◀</button>
-                <div class="blank"></div>
-                <button class="dpad-btn" id="rightBtn">▶</button>
-                <div class="blank"></div><div class="blank"></div><div class="blank"></div>
-            </div>
-            <button class="drop-btn-big" id="dropBtn">DROP</button>
+
+        <div class="pix plushie teddy3" data-id="3">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
         </div>
-        <p class="hint">LINE UP THE CLAW, THEN PRESS DROP · ARROW KEYS + SPACE WORK TOO</p>
+
+
+        <div class="pix plushie teddy4" data-id="4">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+
+        <div class="pix plushie teddy5" data-id="5">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+
+        <div class="pix plushie teddy6" data-id="6">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+
+        <div class="pix plushie teddy7" data-id="7">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+
+        <div class="pix plushie teddy8" data-id="8">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+
+        <div class="pix plushie teddy9" data-id="9">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+
+        <div class="pix plushie teddy10" data-id="10">
+          <div class="ear ear-left"></div>
+          <div class="ear ear-right"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+          <div class="nose"></div>
+          <div class="teddy-heart">♥</div>
+        </div>
+
+      </div>
+
+
+      <!-- FLOOR -->
+
+      <div class="floor"></div>
+
+
+      <!-- PRIZE CHUTE -->
+
+      <div
+              id="prizeChute"
+              class="prize-chute">
+
+        <div class="chute-hole"></div>
+
+        <div class="chute-text">
+          PRIZE
+        </div>
+
+      </div>
+
     </div>
-</section>
 
-<!-- WIN OVERLAY -->
-<div class="win-overlay" id="winOverlay">
-    <p class="win-title pixel-font">YOU WIN!</p>
-    <div class="win-emojis">🎉 🎉 🎉</div>
-    <p class="win-sub">You caught all ten, Hannah. Ten plushies, ten little reasons... but there's one more thing.</p>
-    <button class="btn cyan" id="toLetterBtn" style="margin-top:24px;">OPEN LETTER ♥</button>
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+      <button
+              id="leftButton"
+              class="control-button">
+        ◀
+      </button>
+
+      <button
+              id="grabButton"
+              class="grab-button">
+
+        GRAB
+
+        <small>
+          SPACE
+        </small>
+
+      </button>
+
+      <button
+              id="rightButton"
+              class="control-button">
+        ▶
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       MESSAGE
+  ========================== -->
+
+  <div class="message-box">
+
+    <h2 id="messageTitle">
+      💌 LOVE CLAW MACHINE
+    </h2>
+
+    <p id="message">
+      Start the game and collect
+      the teddy bears for your love. 🧸
+    </p>
+
+    <div class="progress">
+
+      <span id="count">0</span>
+
+      / 10
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       TEDDY MESSAGE MODAL
+  ========================== -->
+
+  <div
+          id="messageModal"
+          class="modal hidden">
+
+    <div class="modal-card">
+
+      <button
+              id="closeModal"
+              class="close-button">
+        ×
+      </button>
+
+      <div
+              id="modalTeddy"
+              class="modal-teddy">
+        🧸
+      </div>
+
+      <h2 id="modalTitle">
+        A message for you 💗
+      </h2>
+
+      <p id="modalMessage">
+        ...
+      </p>
+
+      <button
+              id="continueButton"
+              class="continue-button">
+
+        ♥ KEEP PLAYING ♥
+
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
 
-<!-- LETTER SCREEN -->
-<section id="letter-screen" class="screen">
-    <h1 class="pixel-font letter-title">ONE MORE THING</h1>
-    <p class="logo-sub" style="margin-top:12px;">TAP THE ENVELOPE TO OPEN IT</p>
-
-    <div class="envelope-wrap">
-        <div class="envelope" id="envelope">
-            <div class="env-back"></div>
-            <div class="env-letter"></div>
-            <div class="heart-seal">♥</div>
-            <div class="env-flap"></div>
-        </div>
-    </div>
-
-    <div class="letter-card" id="letterCard">
-        <h2>DEAR HANNAH,</h2>
-        <textarea class="letter-body" id="letterBody" placeholder="Write your message to Hannah here...">[Write your letter here.]</textarea>
-        <div class="letter-sign">— LOVE, [YOUR NAME]</div>
-    </div>
-
-    <div class="row">
-        <button class="btn pink" id="replayBtn">PLAY AGAIN</button>
-    </div>
-</section>
 
 <script src="script.js"></script>
-</body>
-</html></title>
-</head>
-<body>
 
 </body>
 </html>

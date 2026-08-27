@@ -1,469 +1,1399 @@
-:root{
-    --bg:#150a2e;
-    --bg2:#1f1145;
-    --pink:#ff5fa2;
-    --pink-hot:#ff2e9a;
-    --cyan:#4cf5ff;
-    --yellow:#ffe14d;
-    --purple:#9b5de5;
-    --ink:#0d0620;
-    --panel:#241452;
-    --metal:#c7d0da;
-    --metal-dark:#5b6672;
-    --paper:#fff8ea;
-}
-*{box-sizing:border-box; image-rendering:pixelated;}
-html,body{
-    margin:0; padding:0; min-height:100vh;
-    background:var(--bg);
-    color:var(--paper);
-    font-family:'VT323', monospace;
-    overflow-x:hidden;
-    position:relative;
-}
-h1,h2,h3,.pixel-font{font-family:'Press Start 2P', monospace;}
+/* =====================================================
+   RESET
+===================================================== */
 
-/* CRT scanlines + vignette overlay across whole page */
-body::before{
-    content:'';
-    position:fixed; inset:0;
-    background:repeating-linear-gradient(
-            to bottom,
-            rgba(0,0,0,0) 0px,
-            rgba(0,0,0,0) 2px,
-            rgba(0,0,0,.18) 3px,
-            rgba(0,0,0,0) 4px
-    );
-    pointer-events:none;
-    z-index:999;
-    mix-blend-mode:multiply;
-}
-body::after{
-    content:'';
-    position:fixed; inset:0;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%);
-    pointer-events:none;
-    z-index:998;
-}
-body{
-    background-image:
-            radial-gradient(circle at 20% 20%, rgba(255,95,162,0.12) 0, transparent 40%),
-            radial-gradient(circle at 80% 75%, rgba(76,245,255,0.10) 0, transparent 40%),
-            linear-gradient(var(--bg), var(--bg2));
+* {
+    box-sizing: border-box;
 }
 
-.screen{
-    min-height:100vh;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    padding:24px 14px 40px;
-    text-align:center;
-    position:relative;
-    z-index:1;
-}
-.screen.active{display:flex;}
-
-/* ---------- pixel border utility (stepped corners) ---------- */
-.pixel-border{
-    clip-path: polygon(
-            0 8px, 8px 8px, 8px 0,
-            calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
-            100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
-            8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
-    );
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
 
-/* ---------- PRESS START SCREEN ---------- */
-#start-screen{cursor:pointer;}
-.arcade-logo{
-    font-size:clamp(22px,6vw,40px);
-    color:var(--pink-hot);
-    line-height:1.7;
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+
+    min-height: 100vh;
+
+    background: #09101a;
+
+    color: white;
+
+    font-family:
+            "Courier New",
+            monospace;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    image-rendering: pixelated;
+}
+
+
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.wrapper {
+
+    min-height: 100vh;
+
+    width: 100%;
+
+    padding: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+h1 {
+
+    margin: 0 0 15px;
+
+    color: #ffffff;
+
+    font-size: 30px;
+
     text-shadow:
-            3px 3px 0 var(--purple),
-            6px 6px 0 var(--ink);
-    letter-spacing:2px;
-}
-.logo-sub{
-    margin-top:14px;
-    font-size:clamp(13px,3vw,17px);
-    color:var(--cyan);
-    letter-spacing:1px;
-}
-.heart-row{
-    margin:26px 0 10px;
-    font-size:26px;
-    letter-spacing:10px;
-}
-.press-start{
-    font-size:clamp(15px,4vw,20px);
-    color:var(--yellow);
-    margin-top:22px;
-    animation:blink 1s steps(1) infinite;
-    letter-spacing:2px;
-}
-@keyframes blink{
-    0%,49%{opacity:1;}
-    50%,100%{opacity:0;}
-}
-.coin-line{
-    margin-top:30px;
-    font-size:15px;
-    color:#9d8fc9;
-    letter-spacing:1px;
+            4px 4px #0e5367;
 }
 
-/* ---------- buttons ---------- */
-.btn{
-    font-family:'Press Start 2P', monospace;
-    font-size:12px;
-    color:var(--ink);
-    background:var(--yellow);
-    border:none;
-    padding:16px 22px;
-    cursor:pointer;
-    box-shadow:0 6px 0 #b98f00;
-    letter-spacing:1px;
-}
-.btn:active{transform:translateY(5px); box-shadow:none;}
-.btn.pink{background:var(--pink-hot); color:#fff; box-shadow:0 6px 0 #a11a5f;}
-.btn.pink:active{box-shadow:none;}
-.btn.cyan{background:var(--cyan); color:var(--ink); box-shadow:0 6px 0 #1f9aa6;}
-.btn.cyan:active{box-shadow:none;}
+h1 span {
 
-/* ---------- GAME SCREEN / ARCADE CABINET ---------- */
-.cab-wrap{width:100%; max-width:520px;}
-.marquee{
-    background:var(--panel);
-    border:4px solid var(--pink-hot);
-    padding:12px 10px 10px;
-    position:relative;
-}
-.marquee h1{
-    font-size:clamp(14px,3.6vw,20px);
-    color:var(--cyan);
-    text-shadow:2px 2px 0 var(--pink-hot);
-    letter-spacing:1px;
-    margin:0;
-}
-.bulb-row{
-    display:flex;
-    justify-content:space-between;
-    margin-top:10px;
-    padding:0 2px;
-}
-.bulb{
-    width:7px; height:7px;
-    background:var(--yellow);
-    box-shadow:0 0 5px 1px rgba(255,225,77,.9);
-    animation:twinkle 1.2s infinite steps(1);
-}
-.bulb:nth-child(even){animation-delay:.6s;}
-@keyframes twinkle{
-    0%,49%{opacity:1;}
-    50%,100%{opacity:.15;}
+    color: #00eaff;
+
 }
 
-.hud-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:var(--ink);
-    border-top:4px solid var(--pink-hot);
-    border-bottom:4px solid var(--pink-hot);
-    padding:10px 14px;
-}
-.hud-label{font-size:11px; color:var(--cyan); letter-spacing:1px;}
-.hud-score{font-size:16px; color:var(--yellow);}
 
-.tray{
-    display:flex;
-    justify-content:center;
-    gap:5px;
-    flex-wrap:wrap;
-    background:var(--ink);
-    padding:8px 6px;
-    border-bottom:4px solid var(--pink-hot);
-    min-height:42px;
-}
-.tray-slot{
-    width:28px; height:28px;
-    background:#0a0517;
-    border:2px solid var(--metal-dark);
-    display:flex; align-items:center; justify-content:center;
-}
-.tray-slot canvas{width:22px; height:27px;}
-.tray-slot.filled{
-    border-color:var(--yellow);
-    background:#241452;
-    animation:pop .3s ease;
-}
-@keyframes pop{0%{transform:scale(0.2);}70%{transform:scale(1.2);}100%{transform:scale(1);}}
+/* =====================================================
+   START BUTTON
+===================================================== */
 
-.cabinet{
-    position:relative;
-    width:100%;
-    height:min(46vh,340px);
-    background:linear-gradient(180deg, #0a1a2e 0%, #170a2e 100%);
-    border-left:10px solid var(--panel);
-    border-right:10px solid var(--panel);
-    overflow:hidden;
-}
-.cab-grid{
-    position:absolute; inset:0;
-    background-image:
-            linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-    background-size:16px 16px;
-}
-.rail{
-    position:absolute;
-    top:26px; left:10px; right:10px;
-    height:4px;
-    background:var(--metal-dark);
-}
-.claw{
-    position:absolute;
-    top:26px;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    transition:left .3s steps(6), top .5s ease;
-    z-index:4;
-}
-.claw-string{
-    width:4px;
-    background:repeating-linear-gradient(to bottom, var(--metal) 0 4px, var(--metal-dark) 4px 8px);
-    height:0px;
-    transition:height .5s ease;
-}
-.claw-head{
-    display:flex;
-    align-items:flex-end;
-    margin-top:-2px;
-}
-.claw-prong{
-    width:8px; height:16px;
-    background:var(--metal);
-    border:2px solid var(--metal-dark);
-}
-.claw-prong.left{transform:skewX(8deg); margin-right:4px;}
-.claw-prong.right{transform:skewX(-8deg);}
-.claw-bar{
-    width:34px; height:8px;
-    background:var(--metal-dark);
-    border:2px solid #2c333a;
-    margin-bottom:-2px;
-}
-.claw-cargo{
-    margin-top:2px;
-    opacity:0;
-    transition:opacity .2s ease;
-    min-height:26px;
-}
-.claw-cargo.show{opacity:1;}
-.claw-cargo canvas{width:26px; height:32px;}
+.start-button {
 
-.floor{
-    position:absolute;
-    bottom:0; left:0; right:0;
-    height:26%;
-    background:linear-gradient(180deg, transparent, rgba(155,93,229,.25));
-    border-top:2px dashed rgba(199,208,218,.25);
-}
-.plushie{
-    position:absolute;
-    bottom:10%;
-    transform:translateX(-50%);
-    transition:opacity .3s ease, transform .3s ease;
-    z-index:2;
-}
-.plushie canvas{width:36px; height:44px;}
-.plushie.gone{
-    opacity:0;
-    transform:translateX(-50%) scale(0.3) translateY(-10px);
-    pointer-events:none;
+    margin-bottom: 18px;
+
+    padding: 12px 25px;
+
+    background: #ffb7cf;
+
+    color: #63213b;
+
+    border:
+            4px solid #ff6c9d;
+
+    font-family:
+            "Courier New",
+            monospace;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+            5px 5px #651c39;
+
 }
 
-.toast{
-    position:absolute;
-    top:40%; left:50%;
-    transform:translate(-50%,-50%) scale(.8);
-    background:var(--ink);
-    border:2px solid var(--yellow);
-    color:var(--yellow);
-    font-family:'Press Start 2P', monospace;
-    padding:8px 14px;
-    font-size:10px;
-    opacity:0;
-    transition:opacity .2s ease, transform .2s ease;
-    z-index:5;
-    pointer-events:none;
-    white-space:nowrap;
-}
-.toast.show{opacity:1; transform:translate(-50%,-50%) scale(1);}
 
-/* control panel = part of the cabinet, arcade-style */
-.control-panel{
-    background:var(--panel);
-    border-top:4px solid var(--pink-hot);
-    padding:18px 14px 20px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:14px;
-}
-.dpad{
-    display:grid;
-    grid-template-columns:repeat(3, 34px);
-    grid-template-rows:repeat(3, 34px);
-    gap:2px;
-}
-.dpad-btn{
-    background:var(--metal);
-    border:2px solid var(--metal-dark);
-    color:var(--ink);
-    font-family:'Press Start 2P', monospace;
-    font-size:12px;
-    cursor:pointer;
-}
-.dpad-btn:active{background:var(--metal-dark);}
-.dpad .blank{background:transparent; border:none; cursor:default;}
+.start-button:hover {
 
-.drop-btn-big{
-    width:78px; height:78px;
-    border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #ff6fb0, var(--pink-hot) 60%, #a11a5f 100%);
-    border:4px solid #7a0f42;
-    color:#fff;
-    font-family:'Press Start 2P', monospace;
-    font-size:10px;
-    cursor:pointer;
-    box-shadow:0 6px 0 #5c0b31;
-}
-.drop-btn-big:active{transform:translateY(5px); box-shadow:none;}
+    background: #ffc5d9;
 
-.hint{
-    margin-top:14px;
-    font-size:14px;
-    color:#9d8fc9;
-    letter-spacing:.5px;
 }
 
-/* ---------- WIN OVERLAY ---------- */
-.win-overlay{
-    position:fixed; inset:0;
-    background:rgba(13,6,32,.96);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    text-align:center;
-    padding:24px;
-    z-index:60;
-}
-.win-overlay.active{display:flex;}
-.win-title{
-    font-size:clamp(20px,5vw,32px);
-    color:var(--yellow);
-    text-shadow:3px 3px 0 var(--pink-hot);
-    animation:flash 0.6s steps(1) infinite;
-}
-@keyframes flash{
-    0%,49%{color:var(--yellow);}
-    50%,100%{color:var(--cyan);}
-}
-.win-emojis{font-size:36px; margin:14px 0;}
-.win-sub{color:var(--paper); font-size:17px; max-width:340px; margin-top:6px;}
 
-/* ---------- LETTER SCREEN ---------- */
-.letter-title{
-    font-size:clamp(15px,4vw,20px);
-    color:var(--pink-hot);
-    text-shadow:2px 2px 0 var(--purple);
-}
-.envelope-wrap{margin-top:10px;}
-.envelope{
-    width:min(78vw,280px);
-    height:180px;
-    position:relative;
-    cursor:pointer;
-}
-.env-back{
-    position:absolute; inset:0;
-    background:var(--purple);
-    border:4px solid #4d2a8f;
-}
-.env-letter{
-    position:absolute;
-    left:6%; right:6%; top:-4%;
-    height:96%;
-    background:var(--paper);
-    border:3px solid #cbb98a;
-    transition:transform .5s ease;
-    transform-origin:bottom center;
-}
-.env-flap{
-    position:absolute; top:0; left:0; right:0;
-    height:0; width:0;
-    border-left:140px solid transparent;
-    border-right:140px solid transparent;
-    border-top:88px solid #7a4fd1;
-    transform-origin:top center;
-    transition:transform .5s ease;
-    z-index:3;
-}
-.envelope.open .env-letter{transform:translateY(-58%);}
-.envelope.open .env-flap{transform:rotateX(180deg);}
-.heart-seal{
-    position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    font-size:22px;
-    z-index:4;
-    transition:opacity .3s ease;
-}
-.envelope.open .heart-seal{opacity:0;}
+.start-button:active {
 
-.letter-card{
-    display:none;
-    width:min(90vw,460px);
-    background:var(--paper);
-    color:#2b2038;
-    padding:26px 24px;
-    margin-top:22px;
-    border:4px solid var(--purple);
-    text-align:left;
-}
-.letter-card.show{display:block;}
-.letter-card h2{
-    font-family:'Press Start 2P', monospace;
-    color:var(--pink-hot);
-    font-size:15px;
-    margin-bottom:16px;
-    line-height:1.6;
-}
-.letter-body{
-    width:100%;
-    min-height:220px;
-    border:none;
-    background:transparent;
-    resize:vertical;
-    font-family:'VT323', monospace;
-    font-size:20px;
-    line-height:1.5;
-    color:#2b2038;
-    outline:none;
-}
-.letter-sign{
-    text-align:right;
-    font-family:'Press Start 2P', monospace;
-    font-size:11px;
-    color:var(--purple);
-    margin-top:10px;
+    transform:
+            translate(4px, 4px);
+
+    box-shadow:
+            1px 1px #651c39;
+
 }
 
-.row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:22px;}
+
+.start-button:disabled {
+
+    opacity: .55;
+
+    cursor: default;
+}
+
+
+/* =====================================================
+   MACHINE
+===================================================== */
+
+.machine {
+
+    width: 500px;
+
+    max-width: 95vw;
+
+    padding: 12px;
+
+    background: #08bdd5;
+
+    border:
+            7px solid #55291e;
+
+    box-shadow:
+            0 0 0 5px #b8eff0,
+            9px 11px #000;
+}
+
+
+/* =====================================================
+   GLASS
+===================================================== */
+
+.glass {
+
+    position: relative;
+
+    height: 500px;
+
+    overflow: hidden;
+
+    background:
+            linear-gradient(
+                    90deg,
+                    #61dce5,
+                    #54cedb,
+                    #5ddbe3
+            );
+
+    border:
+            5px solid #51271d;
+}
+
+
+/* =====================================================
+   GLASS SHINE
+===================================================== */
+
+.glass::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 22px;
+
+    width: 7px;
+    height: 320px;
+
+    background:
+            rgba(255,255,255,.25);
+
+    z-index: 100;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   TOP BROWN BAR
+===================================================== */
+
+.glass::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 132px;
+
+    width: 100%;
+    height: 12px;
+
+    background: #54271a;
+
+    z-index: 80;
+}
+
+
+/* =====================================================
+   PIXEL SYSTEM
+===================================================== */
+
+.pix::before,
+.pix::after {
+
+    position: absolute;
+
+    content: "";
+
+}
+
+
+.pix {
+
+    --w: 16;
+    --h: 20;
+    --m: 5px;
+
+    image-rendering:
+            pixelated;
+
+}
+
+
+/* =====================================================
+   PLUSHIE CONTAINER
+===================================================== */
+
+.plushie {
+
+    position: absolute;
+
+    width: 80px;
+    height: 105px;
+
+    z-index: 20;
+
+    cursor: pointer;
+
+    transition:
+            opacity .2s ease,
+            transform .2s ease;
+
+    will-change:
+            left,
+            top,
+            transform,
+            opacity;
+}
+
+
+/* =====================================================
+   TEDDY EARS
+===================================================== */
+
+.ear {
+
+    position: absolute;
+
+    top: 7px;
+
+    width: 24px;
+    height: 24px;
+
+    background:
+            var(--teddy);
+
+    border:
+            5px solid #4d3028;
+
+    z-index: 2;
+
+}
+
+
+.ear-left {
+
+    left: 2px;
+
+}
+
+
+.ear-right {
+
+    right: 2px;
+
+}
+
+
+/* =====================================================
+   TEDDY HEAD
+===================================================== */
+
+.head {
+
+    position: absolute;
+
+    left: 10px;
+    top: 12px;
+
+    width: 60px;
+    height: 55px;
+
+    background:
+            var(--teddy);
+
+    border:
+            5px solid #4d3028;
+
+    z-index: 3;
+
+}
+
+
+/* =====================================================
+   TEDDY BODY
+===================================================== */
+
+.body {
+
+    position: absolute;
+
+    left: 6px;
+    top: 62px;
+
+    width: 68px;
+    height: 43px;
+
+    background:
+            var(--teddy);
+
+    border:
+            5px solid #4d3028;
+
+    z-index: 1;
+
+}
+
+
+/* =====================================================
+   TEDDY BELLY
+===================================================== */
+
+.body::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 13px;
+    top: 8px;
+
+    width: 33px;
+    height: 22px;
+
+    background:
+            var(--belly);
+
+    border:
+            3px solid #8b5c50;
+
+}
+
+
+/* =====================================================
+   TEDDY EYES
+===================================================== */
+
+.eye {
+
+    position: absolute;
+
+    top: 33px;
+
+    width: 7px;
+    height: 7px;
+
+    background: #291f1c;
+
+    z-index: 7;
+
+}
+
+
+.eye-left {
+
+    left: 24px;
+
+}
+
+
+.eye-right {
+
+    right: 24px;
+
+}
+
+
+/* =====================================================
+   TEDDY NOSE
+===================================================== */
+
+.nose {
+
+    position: absolute;
+
+    left: 34px;
+    top: 43px;
+
+    width: 11px;
+    height: 8px;
+
+    background: #3a2221;
+
+    z-index: 8;
+
+}
+
+
+.nose::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 4px;
+    top: 7px;
+
+    width: 3px;
+    height: 5px;
+
+    background: #3a2221;
+
+}
+
+
+/* =====================================================
+   TEDDY HEART
+===================================================== */
+
+.teddy-heart {
+
+    position: absolute;
+
+    left: 31px;
+    top: 74px;
+
+    color: #ff4f88;
+
+    font-size: 15px;
+
+    z-index: 10;
+
+}
+
+
+/* =====================================================
+   10 TEDDY COLORS
+===================================================== */
+
+
+/* 1 - Pink */
+
+.teddy1 {
+
+    left: 2%;
+    bottom: 130px;
+
+    --teddy: #e98aa8;
+    --belly: #ffd0dc;
+}
+
+
+/* 2 - Cream */
+
+.teddy2 {
+
+    left: 21%;
+    bottom: 130px;
+
+    --teddy: #f2d6a5;
+    --belly: #fff0cf;
+}
+
+
+/* 3 - Mint */
+
+.teddy3 {
+
+    left: 40%;
+    bottom: 134px;
+
+    --teddy: #8dd7c1;
+    --belly: #d8f6e9;
+}
+
+
+/* 4 - Lavender */
+
+.teddy4 {
+
+    left: 60%;
+    bottom: 130px;
+
+    --teddy: #b49ae8;
+    --belly: #e3d8ff;
+}
+
+
+/* 5 - Baby Blue */
+
+.teddy5 {
+
+    left: 79%;
+    bottom: 132px;
+
+    --teddy: #83c9e8;
+    --belly: #d9f2ff;
+}
+
+
+/* 6 - Peach */
+
+.teddy6 {
+
+    left: 10%;
+    bottom: 25px;
+
+    --teddy: #eaa27e;
+    --belly: #ffd9c5;
+}
+
+
+/* 7 - Yellow */
+
+.teddy7 {
+
+    left: 29%;
+    bottom: 20px;
+
+    --teddy: #ebc75f;
+    --belly: #fff0a8;
+}
+
+
+/* 8 - Red */
+
+.teddy8 {
+
+    left: 49%;
+    bottom: 25px;
+
+    --teddy: #d96879;
+    --belly: #f7b5c0;
+}
+
+
+/* 9 - Brown */
+
+.teddy9 {
+
+    left: 68%;
+    bottom: 20px;
+
+    --teddy: #a87558;
+    --belly: #e3b99d;
+}
+
+
+/* 10 - Purple/Pink */
+
+.teddy10 {
+
+    left: 85%;
+    bottom: 18px;
+
+    --teddy: #d889c4;
+    --belly: #f5c9ea;
+}
+
+
+/* =====================================================
+   CLAW
+===================================================== */
+
+.claw {
+
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+
+    width: 70px;
+    height: 300px;
+
+    transform:
+            translateX(-50%);
+
+    z-index: 70;
+
+    transition:
+            left .12s linear,
+            top .75s cubic-bezier(
+                    .22,
+                    1,
+                    .36,
+                    1
+            );
+
+    will-change:
+            left,
+            top;
+
+}
+
+
+/* =====================================================
+   ROPE
+===================================================== */
+
+.rope {
+
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+
+    width: 6px;
+    height: 112px;
+
+    transform:
+            translateX(-50%);
+
+    background: #777;
+
+    box-shadow:
+            2px 0 #444;
+
+}
+
+
+/* =====================================================
+   CLAW HEAD
+===================================================== */
+
+.claw-head {
+
+    position: absolute;
+
+    left: 10px;
+    top: 105px;
+
+    width: 50px;
+    height: 36px;
+
+    background: #ededed;
+
+    border:
+            5px solid #555;
+
+    box-shadow:
+            inset 0 -6px #aaa;
+
+}
+
+
+/* =====================================================
+   CLAW LIGHT
+===================================================== */
+
+.claw-light {
+
+    position: absolute;
+
+    left: 17px;
+    top: 8px;
+
+    width: 7px;
+    height: 7px;
+
+    background: #ff6689;
+
+}
+
+
+/* =====================================================
+   CLAW ARMS
+===================================================== */
+
+.claw-arm {
+
+    position: absolute;
+
+    top: 130px;
+
+    width: 18px;
+    height: 55px;
+
+    background: #eee;
+
+    border:
+            5px solid #555;
+
+    transform-origin:
+            top center;
+
+    transition:
+            transform .28s
+            cubic-bezier(
+                    .22,
+                    1,
+                    .36,
+                    1
+            );
+
+}
+
+
+/* left */
+
+.left-arm {
+
+    left: 10px;
+
+    transform:
+            rotate(25deg);
+
+}
+
+
+/* right */
+
+.right-arm {
+
+    right: 10px;
+
+    transform:
+            rotate(-25deg);
+
+}
+
+
+/* grabbing */
+
+.claw.grabbing .left-arm {
+
+    transform:
+            rotate(7deg);
+
+}
+
+
+.claw.grabbing .right-arm {
+
+    transform:
+            rotate(-7deg);
+
+}
+
+
+/* =====================================================
+   FLOOR
+===================================================== */
+
+.floor {
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 62px;
+
+    background: #079eb8;
+
+    border-top:
+            7px solid #542719;
+
+    z-index: 40;
+
+}
+
+
+/* =====================================================
+   PRIZE CHUTE
+===================================================== */
+
+.prize-chute {
+
+    position: absolute;
+
+    left: 12px;
+    bottom: 8px;
+
+    width: 108px;
+    height: 48px;
+
+    background: #087ca0;
+
+    border:
+            5px solid #07566d;
+
+    z-index: 50;
+
+}
+
+
+/* hole */
+
+.chute-hole {
+
+    position: absolute;
+
+    left: 23px;
+    top: 6px;
+
+    width: 52px;
+    height: 18px;
+
+    background: #052f3d;
+
+}
+
+
+/* text */
+
+.chute-text {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: -16px;
+
+    text-align: center;
+
+    font-size: 8px;
+
+}
+
+
+/* =====================================================
+   FALLING TEDDY
+===================================================== */
+
+.plushie.falling {
+
+    animation:
+            teddyDrop
+            .8s
+            cubic-bezier(
+                    .2,
+                    .7,
+                    .3,
+                    1
+            )
+            forwards;
+
+}
+
+
+@keyframes teddyDrop {
+
+    0% {
+
+        transform:
+                translateY(0)
+                rotate(0deg);
+
+    }
+
+    65% {
+
+        transform:
+                translateY(65px)
+                rotate(0deg);
+
+    }
+
+    80% {
+
+        transform:
+                translateY(52px)
+                rotate(-2deg);
+
+    }
+
+    90% {
+
+        transform:
+                translateY(60px)
+                rotate(2deg);
+
+    }
+
+    100% {
+
+        transform:
+                translateY(57px)
+                rotate(0deg);
+
+    }
+
+}
+
+
+/* =====================================================
+   COLLECTED
+===================================================== */
+
+.plushie.collected {
+
+    pointer-events: none;
+
+}
+
+
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+.controls {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+            space-between;
+
+    gap: 10px;
+
+    padding-top: 10px;
+
+}
+
+
+/* =====================================================
+   LEFT / RIGHT
+===================================================== */
+
+.control-button {
+
+    width: 65px;
+    height: 54px;
+
+    background: #079bb7;
+
+    color: white;
+
+    border:
+            5px solid #07586d;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    box-shadow:
+            5px 5px #053b4a;
+
+}
+
+
+.control-button:active {
+
+    transform:
+            translate(4px,4px);
+
+    box-shadow:
+            1px 1px #053b4a;
+
+}
+
+
+/* =====================================================
+   GRAB
+===================================================== */
+
+.grab-button {
+
+    flex: 1;
+
+    height: 54px;
+
+    background: #eee;
+
+    color: #555;
+
+    border:
+            5px solid #aaa;
+
+    font-family:
+            "Courier New",
+            monospace;
+
+    font-weight: bold;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    box-shadow:
+            5px 5px #555;
+
+}
+
+
+.grab-button:active {
+
+    transform:
+            translate(4px,4px);
+
+    box-shadow:
+            1px 1px #555;
+
+}
+
+
+.grab-button:disabled {
+
+    opacity: .45;
+
+}
+
+
+.grab-button small {
+
+    display: block;
+
+    font-size: 8px;
+
+    margin-top: 2px;
+
+}
+
+
+/* =====================================================
+   MESSAGE BOX
+===================================================== */
+
+.message-box {
+
+    width: 500px;
+
+    max-width: 95vw;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: #142131;
+
+    border:
+            4px solid #00eaff;
+
+    box-shadow:
+            6px 6px #000;
+
+    text-align: center;
+
+}
+
+
+.message-box h2 {
+
+    margin:
+            0 0 10px;
+
+    color: #ff76a7;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+}
+
+
+.message-box p {
+
+    min-height: 48px;
+
+    margin: 0;
+
+    font-size: 10px;
+
+    line-height: 1.8;
+
+}
+
+
+.progress {
+
+    margin-top: 12px;
+
+    color: #00eaff;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   MESSAGE MODAL
+===================================================== */
+
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 999;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    background:
+            rgba(5, 10, 18, .78);
+
+}
+
+
+.modal.hidden {
+
+    display: none;
+
+}
+
+
+/* =====================================================
+   MODAL CARD
+===================================================== */
+
+.modal-card {
+
+    position: relative;
+
+    width: 420px;
+
+    max-width: 94vw;
+
+    padding: 25px;
+
+    background: #172537;
+
+    border:
+            5px solid #ff78a8;
+
+    box-shadow:
+            8px 8px #000;
+
+    text-align: center;
+
+}
+
+
+.close-button {
+
+    position: absolute;
+
+    right: 10px;
+    top: 10px;
+
+    width: 32px;
+    height: 32px;
+
+    background: #ff6f9f;
+
+    color: white;
+
+    border:
+            3px solid #a32f5e;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+}
+
+
+/* =====================================================
+   MODAL TEDDY
+===================================================== */
+
+.modal-teddy {
+
+    font-size: 70px;
+
+    margin-bottom: 10px;
+
+    animation:
+            teddyBounce
+            .8s
+            ease-in-out;
+}
+
+
+@keyframes teddyBounce {
+
+    0% {
+
+        transform:
+                translateY(-20px)
+                scale(.8);
+
+    }
+
+    60% {
+
+        transform:
+                translateY(5px)
+                scale(1.1);
+
+    }
+
+    100% {
+
+        transform:
+                translateY(0)
+                scale(1);
+
+    }
+
+}
+
+
+/* =====================================================
+   MODAL TITLE
+===================================================== */
+
+.modal-card h2 {
+
+    color: #ff9abe;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =====================================================
+   MODAL MESSAGE
+===================================================== */
+
+.modal-card p {
+
+    color: white;
+
+    font-size: 10px;
+
+    line-height: 2;
+
+}
+
+
+/* =====================================================
+   CONTINUE
+===================================================== */
+
+.continue-button {
+
+    margin-top: 15px;
+
+    padding: 12px 18px;
+
+    background: #ff78a8;
+
+    color: white;
+
+    border:
+            4px solid #a9345e;
+
+    font-family:
+            "Courier New",
+            monospace;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+            4px 4px #5e1c36;
+
+}
+
+
+.continue-button:active {
+
+    transform:
+            translate(3px,3px);
+
+    box-shadow:
+            1px 1px #5e1c36;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:520px) {
+
+    .wrapper {
+        padding: 15px 8px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .machine {
+        padding: 8px;
+    }
+
+    .glass {
+        height: 470px;
+    }
+
+    .plushie {
+        transform: scale(.82);
+        transform-origin: bottom center;
+    }
+
+    .message-box p {
+        font-size: 9px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media(max-width:380px) {
+
+    .control-button {
+        width: 55px;
+    }
+
+    .grab-button {
+        font-size: 9px;
+    }
+
+    .glass {
+        height: 450px;
+    }
+
+}
