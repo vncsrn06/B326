@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -13,27 +14,28 @@
   <link
           rel="stylesheet"
           href="style.css">
+
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="page">
 
   <!-- =========================================
        TITLE
   ========================================== -->
 
   <h1>
-    <span>LOVE</span> CLAW MACHINE
+    <span>Claw Machine</span> Game
   </h1>
 
 
   <!-- =========================================
-       START BUTTON
+       START GAME
   ========================================== -->
 
   <button
-          id="startGame"
+          id="startButton"
           class="start-button">
 
     ♥ START GAME ♥
@@ -48,17 +50,17 @@
   <div class="machine">
 
     <div
-            class="glass"
-            id="glass">
+            id="glass"
+            class="glass">
 
 
-      <!-- =================================
+      <!-- =====================================
            CLAW
-      ================================== -->
+      ====================================== -->
 
       <div
-              class="claw"
-              id="claw">
+              id="claw"
+              class="claw">
 
         <div class="rope"></div>
 
@@ -68,40 +70,38 @@
 
         </div>
 
-        <div class="claw-arm left-arm"></div>
+        <div class="finger left"></div>
 
-        <div class="claw-arm right-arm"></div>
+        <div class="finger right"></div>
 
       </div>
 
 
-      <!-- =================================
-           TEDDY BEARS
-      ================================== -->
+      <!-- =====================================
+           TEDDY AREA
+      ====================================== -->
 
-      <div class="plushies">
+      <div
+              id="playfield"
+              class="playfield">
 
 
         <!-- TEDDY 1 -->
 
         <div
-                class="plushie teddy teddy1"
+                class="teddy teddy1"
                 data-id="1">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -112,23 +112,19 @@
         <!-- TEDDY 2 -->
 
         <div
-                class="plushie teddy teddy2"
+                class="teddy teddy2"
                 data-id="2">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -139,23 +135,19 @@
         <!-- TEDDY 3 -->
 
         <div
-                class="plushie teddy teddy3"
+                class="teddy teddy3"
                 data-id="3">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -166,23 +158,19 @@
         <!-- TEDDY 4 -->
 
         <div
-                class="plushie teddy teddy4"
+                class="teddy teddy4"
                 data-id="4">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -193,23 +181,19 @@
         <!-- TEDDY 5 -->
 
         <div
-                class="plushie teddy teddy5"
+                class="teddy teddy5"
                 data-id="5">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -220,23 +204,19 @@
         <!-- TEDDY 6 -->
 
         <div
-                class="plushie teddy teddy6"
+                class="teddy teddy6"
                 data-id="6">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -247,23 +227,19 @@
         <!-- TEDDY 7 -->
 
         <div
-                class="plushie teddy teddy7"
+                class="teddy teddy7"
                 data-id="7">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -274,23 +250,19 @@
         <!-- TEDDY 8 -->
 
         <div
-                class="plushie teddy teddy8"
+                class="teddy teddy8"
                 data-id="8">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -301,23 +273,19 @@
         <!-- TEDDY 9 -->
 
         <div
-                class="plushie teddy teddy9"
+                class="teddy teddy9"
                 data-id="9">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -328,23 +296,19 @@
         <!-- TEDDY 10 -->
 
         <div
-                class="plushie teddy teddy10"
+                class="teddy teddy10"
                 data-id="10">
 
-          <div class="ear ear-left"></div>
-
-          <div class="ear ear-right"></div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
 
           <div class="head"></div>
-
           <div class="body"></div>
 
-          <div class="eye eye-left"></div>
-
-          <div class="eye-right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
 
           <div class="nose"></div>
-
           <div class="mouth"></div>
 
           <div class="heart">♥</div>
@@ -354,35 +318,54 @@
       </div>
 
 
-      <!-- =================================
-           FLOOR
-      ================================== -->
+      <!-- =====================================
+           BIG DROP AREA
+      ====================================== -->
 
-      <div class="floor"></div>
+      <div class="drop-space">
 
-
-      <!-- =================================
-           PRIZE CHUTE
-      ================================== -->
-
-      <div
-              class="prize-chute"
-              id="prizeChute">
-
-        <div class="chute-hole"></div>
-
-        <div class="chute-text">
-          PRIZE
+        <div class="drop-arrow">
+          ↓
         </div>
 
       </div>
 
 
-      <!-- =================================
-           GLASS SHINE
-      ================================== -->
+      <!-- =====================================
+           MACHINE FLOOR
+      ====================================== -->
 
-      <div class="glass-shine"></div>
+      <div class="floor"></div>
+
+
+      <!-- =====================================
+           LARGE PRIZE CHUTE
+      ====================================== -->
+
+      <div
+              id="prizeChute"
+              class="prize-chute">
+
+        <div class="chute-opening">
+
+          <div class="chute-dark"></div>
+
+        </div>
+
+        <div class="chute-label">
+
+          ♥ PRIZE CHUTE ♥
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================
+           GLASS REFLECTION
+      ====================================== -->
+
+      <div class="glass-reflection"></div>
 
     </div>
 
@@ -395,7 +378,8 @@
 
       <button
               id="leftButton"
-              class="control-button">
+              class="control-button"
+              disabled>
 
         ◀
 
@@ -404,7 +388,8 @@
 
       <button
               id="grabButton"
-              class="grab-button">
+              class="grab-button"
+              disabled>
 
         GRAB
 
@@ -417,7 +402,8 @@
 
       <button
               id="rightButton"
-              class="control-button">
+              class="control-button"
+              disabled>
 
         ▶
 
@@ -429,23 +415,24 @@
 
 
   <!-- =========================================
-       MESSAGE
+       STATUS
   ========================================== -->
 
-  <div class="message-box">
+  <div class="status-box">
 
     <h2 id="messageTitle">
       💌 LOVE CLAW MACHINE
     </h2>
 
     <p id="message">
-      Press START GAME and
-      catch your first teddy. 🧸
+      Press START GAME to begin.
     </p>
 
-    <div class="progress">
+    <div class="counter">
 
-            <span id="count">
+      TEDDIES OPENED:
+
+      <span id="count">
                 0
             </span>
 
@@ -457,7 +444,7 @@
 
 
   <!-- =========================================
-       MESSAGE POPUP
+       MESSAGE MODAL
   ========================================== -->
 
   <div
@@ -465,9 +452,6 @@
           class="modal hidden">
 
     <div class="modal-card">
-
-
-      <!-- CLOSE -->
 
       <button
               id="closeModal"
@@ -478,16 +462,12 @@
       </button>
 
 
-      <!-- PICTURE -->
-
       <img
               id="modalImage"
               class="modal-image"
               src=""
               alt="Memory">
 
-
-      <!-- TEDDY -->
 
       <div
               id="modalTeddy"
@@ -498,27 +478,21 @@
       </div>
 
 
-      <!-- TITLE -->
-
       <h2 id="modalTitle">
-        A message for you 💗
+        Teddy
       </h2>
 
-
-      <!-- MESSAGE -->
 
       <p id="modalMessage">
         ...
       </p>
 
 
-      <!-- CONTINUE -->
-
       <button
               id="continueButton"
               class="continue-button">
 
-        ♥ KEEP PLAYING ♥
+        ♥ CONTINUE ♥
 
       </button>
 
