@@ -3,6 +3,8 @@ package com.joysistvi.stage1.day13;
 public class Main {
     // Create an object -> Instantiation
     // ClassName Object
+
+    // Scanner, String, Math
     public static void main(String[] args) {
 
         Laptop laptop = new Laptop();
